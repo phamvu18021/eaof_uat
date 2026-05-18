@@ -17,20 +17,6 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: true,
-  async headers() {
-    return [
-      {
-        source: "/:path*",
-        headers: [
-          {
-            key: "Link",
-            value:
-              '<https://etnu.aum.edu.vn>; rel="preconnect", <https://www.googletagmanager.com>; rel="preconnect", <https://www.google-analytics.com>; rel="preconnect"'
-          }
-        ]
-      }
-    ];
-  },
   experimental: {
     optimizePackageImports: [
       "react-icons",
