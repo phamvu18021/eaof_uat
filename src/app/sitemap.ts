@@ -49,13 +49,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("Sitemap generation error:", err);
   }
 
-  const staticEntries = staticPaths.map((path) => {
-    const formattedPath = path === "/" ? "" : (path.startsWith("/") ? path : `/${path}`);
-    return {
-      url: `${URL}${formattedPath}`,
-      lastModified: new Date()
-    };
-  });
+  const staticEntries = staticPaths.map((path) => ({
+    url: `${URL}${path === "/" ? "" : (path.startsWith("/") ? path : `/${path}`)}`,
+    lastModified: new Date()
+  }));
 
   const postEntries = posts.map((post) => ({
     url: `${URL}/${post.slug}`,
