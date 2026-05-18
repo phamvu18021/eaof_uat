@@ -19,7 +19,7 @@ export const Banner = ({
         <Image
           src={bannerData || "/anh-bia-facebook.webp"}
           width={1920}
-          height={1080}
+          height={712}
           alt="Đại học Thái Nguyên"
           priority
           fetchPriority="high"
@@ -41,8 +41,8 @@ export const Banner = ({
       >
         <Image
           src={bannerData_mobile || bannerData || "/banner-9-nganh-tnu_mobile.jpg"}
-          width={768}
-          height={1000}
+          width={620}
+          height={228}
           alt="Đại học Thái Nguyên"
           priority
           fetchPriority="high"

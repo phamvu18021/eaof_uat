@@ -128,7 +128,7 @@ export const BtnEmail = ({ label }: { label: string }) => {
           </Text>
         </HStack>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent aria-label="Để lại thông tin">
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverHeader as={Heading} size={"md"} textAlign={"center"}>

@@ -16,7 +16,7 @@ export const ModalBase = (props: IModalBase) => {
   const { onClose, isOpen, form } = props;
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered aria-label="Để lại thông tin">
         <ModalOverlay />
         <ModalContent
           bg={"white"}
