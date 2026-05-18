@@ -9,7 +9,7 @@ export const DelayGTM = ({ gtmId }: { gtmId: string }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoadGTM(true);
-    }, 6000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
