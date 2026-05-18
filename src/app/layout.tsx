@@ -5,7 +5,6 @@ import "@/styles/tableContent.css";
 import { Providers } from "./providers";
 import Layout from "@/layouts";
 import Script from "next/script";
-import { DelayGTM } from "@/components/DelayGTM";
 
 const montserrat = Montserrat({
   weight: ["400", "500", "700"],
@@ -31,11 +30,29 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className={montserrat.className}>
+        <noscript>
+          <iframe
+            title="Google Tag Manager"
+            src="https://www.googletagmanager.com/ns.html?id=GTM-W57CPPPF"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        <Script id="google-tag-manager" strategy="beforeInteractive">
+          {`
+            (function(w,d,s,l,i){
+              w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+              var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
+              j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+              f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-W57CPPPF');
+          `}
+        </Script>
         <Providers>
           <Layout>{children}</Layout>
         </Providers>
       </body>
-      <DelayGTM gtmId="GTM-W57CPPPF" />
     </html>
   );
 }
