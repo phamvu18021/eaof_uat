@@ -171,7 +171,7 @@ export const Home = ({
         isOpen={isOpen}
         onClose={onClose}
         onOpen={onOpen}
-        form={<FormWrapper title="Để lại thông tin" />}
+        form={isOpen ? <FormWrapper title="Để lại thông tin" /> : null}
       />
     </>
   );

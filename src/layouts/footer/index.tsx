@@ -185,27 +185,23 @@ export const Footer = () => {
                 </UnorderedList>
                 <Box
                   as={Link}
-                  href={`tel:${
-                    page_content?.acf?.section_8?.main?.block_12?.block_1
-                      ?.hotline || "0914709118"
-                  }`}
+                  href={`tel:${page_content?.acf?.section_8?.main?.block_12?.block_1
+                    ?.hotline || "0914709118"
+                    }`}
                 >
-                  {`Hotline: ${
-                    page_content?.acf?.section_8?.main?.block_12?.block_1
-                      ?.hotline || "0914709118"
-                  }`}
+                  {`Hotline: ${page_content?.acf?.section_8?.main?.block_12?.block_1
+                    ?.hotline || "0914709118"
+                    }`}
                 </Box>
                 <Box
                   as={Link}
-                  href={`mailto:${
-                    page_content?.acf?.section_8?.main?.block_12?.block_1
-                      ?.email || "daihoctructuyen@tnu.edu.vn"
-                  }`}
+                  href={`mailto:${page_content?.acf?.section_8?.main?.block_12?.block_1
+                    ?.email || "daihoctructuyen@tnu.edu.vn"
+                    }`}
                 >
-                  {`Email: ${
-                    page_content?.acf?.section_8?.main?.block_12?.block_1
-                      ?.email || "daihoctructuyen@tnu.edu.vn"
-                  }`}
+                  {`Email: ${page_content?.acf?.section_8?.main?.block_12?.block_1
+                    ?.email || "daihoctructuyen@tnu.edu.vn"
+                    }`}
                 </Box>
                 <Box
                   as={Link}
@@ -361,7 +357,7 @@ export const Footer = () => {
         onClose={() => onClose && onClose()}
         onOpen={() => onOpen && onOpen()}
       >
-        <FormWrapper title="Để lại thông tin" type="form-poup" />
+        {isOpen && <FormWrapper title="Để lại thông tin" />}
       </ModalBase>
     </>
   );
