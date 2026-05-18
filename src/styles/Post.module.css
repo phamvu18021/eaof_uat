@@ -8,7 +8,6 @@
 .post__main p {
   padding-bottom: 12px;
 }
-
 .post__main h1,
 .post__main h2,
 .post__main h3,
@@ -16,55 +15,33 @@
   font-weight: bold;
   padding-bottom: 8px;
 }
-
 .post__main h1 {
-  font-size: 1.7rem;
-}
-
-.post__main h2 {
   font-size: 1.5rem;
 }
-
+.post__main h2 {
+  font-size: 1.4rem;
+}
 .post__main h3 {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
-
 .post__main h4 {
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
-
 .post__main li {
-  margin-left: 25px;
   padding-bottom: 8px;
 }
-
 .post__main a {
   color: blueviolet;
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
-
 .post__main img {
   display: block;
   margin: 0 auto;
 }
-
 .post__main figcaption {
-  padding-top: 5px;
   text-align: center;
-  font-weight: 400;
+  font-weight: 500;
   padding-bottom: 8px;
-  font-style: italic;
-}
-
-.post__main table,
-.post__main th,
-.post__main td {
-  border: 1px solid black;
-}
-
-.post__main th,
-.post__main td {
-  padding: 6px;
 }
 
 .post__heading {
@@ -99,7 +76,6 @@
   .post {
     flex-direction: row;
   }
-
   .post--share {
     padding-top: 24px;
     margin-right: 24px;

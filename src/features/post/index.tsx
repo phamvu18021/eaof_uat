@@ -3,24 +3,13 @@
 import { clean } from "@/lib/sanitizeHtml";
 import styles from "@/styles/Post.module.css";
 import { formatDate } from "@/ultil/date";
-import dynamic from "next/dynamic";
 import Link from "next/link";
+import { SamePosts } from "./Sames";
 import { useEffect } from "react";
-
-const SamePosts = dynamic(() =>
-  import("@/features/post/Sames").then((mod) => mod.SamePosts)
-);
-const Share = dynamic(() =>
-  import("@/features/post/Share").then((mod) => mod.Share)
-);
-const ScrollView = dynamic(() =>
-  import("@/components/ScrollView").then((mod) => mod.ScrollView)
-);
 
 export const Post = ({ post }: { post: any }) => {
   const catIds = post?.categories || [];
   const catId = catIds[0];
-
   useEffect(() => {
     const insertToggleButton = () => {
       const tocContainer = document.getElementById("toc_container");
@@ -73,12 +62,8 @@ export const Post = ({ post }: { post: any }) => {
 
     insertToggleButton();
   }, [post]);
-
   return (
     <article className={styles["post"]}>
-      <div className={styles["post--share"]}>
-        <Share url={post?.slug || "#"} />
-      </div>
       <main>
         {post && (
           <>
@@ -98,17 +83,15 @@ export const Post = ({ post }: { post: any }) => {
               />
             </div>
 
-            <ScrollView>
-              <SamePosts catId={catId} id={post?.id} />
-            </ScrollView>
+            <SamePosts catId={catId} id={post?.id} />
           </>
         )}
 
         {!post && (
           <div className={styles["not-found"]}>
             <p>Bài viết này không tồn tại!</p>
-            <Link className={styles["back-new"]} href={"/ban-tin"}>
-              Trở về trang bản tin
+            <Link className={styles["back-new"]} href={"/tin-tuc"}>
+              Trở về trang tin tức
             </Link>
           </div>
         )}

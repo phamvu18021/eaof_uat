@@ -1,11 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useEffect, useState } from "react";
 import { Box, Heading, Skeleton } from "@chakra-ui/react";
-import { FormGetFly } from "./FormGetFly";
-import { FormSam } from "./FormSam";
-import { FormGoogle } from "./FormGoogle";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { Loading } from "./Loading";
+
+const FormGetFly = dynamic(() =>
+  import("./FormGetFly").then((mod) => mod.FormGetFly)
+);
+const FormSam = dynamic(() =>
+  import("./FormSam").then((mod) => mod.FormSam)
+);
+const FormGoogle = dynamic(() =>
+  import("./FormGoogle").then((mod) => mod.FormGoogle)
+);
 
 interface FormData {
   type: "form-getfly" | "form-sam" | "form-google" | "unknown";
@@ -17,12 +26,12 @@ interface FormData {
 
 export const FormWrapper = ({
   title,
-  color,
-  type = "form_main"
+  color = "#030d47",
+  type = "form-main"
 }: {
   title?: string;
   color?: string;
-  type?: "form_main" | "form_poup";
+  type?: "form-main" | "form-poup";
 }) => {
   const [formData, setFormData] = useState<FormData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,34 +42,27 @@ export const FormWrapper = ({
       const cacheExpireMs = 1000 * 60 * 60 * 6; // 6 tiếng
 
       try {
-        // Kiểm tra có đang chạy ở client không (tránh lỗi SSR)
-        if (typeof window === "undefined") return;
-
         const cached = localStorage.getItem(key);
-
         if (cached) {
           const parsed = JSON.parse(cached);
-          // Nếu cache còn hạn thì dùng luôn
           if (parsed.expires > Date.now()) {
             setFormData(parsed.data);
             setIsLoading(false);
             return;
           } else {
-            // Cache hết hạn thì xoá
-            localStorage.removeItem(key);
+            localStorage.removeItem(key); // Xoá cache hết hạn
           }
         }
 
-        // Không có cache hoặc cache hết hạn → gọi API
-        const res = await fetch(`/api/gen-form/?type=${type}`);
+        // Gọi API nếu không có cache
+        const res = await fetch(`/api/gen-form/?type=form-main`);
         if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
+          throw new Error(`Form fetch failed: ${res.statusText}`);
         }
-
         const data = await res.json();
         setFormData(data);
 
-        // Lưu cache mới
+        // Lưu vào localStorage
         localStorage.setItem(
           key,
           JSON.stringify({
@@ -76,7 +78,7 @@ export const FormWrapper = ({
     };
 
     fetchFormData();
-  }, [type]);
+  }, []);
 
   if (isLoading) {
     return (
@@ -92,23 +94,24 @@ export const FormWrapper = ({
 
   return (
     <>
-      {title && (
-        <Heading
-          as={"h2"}
-          size={{ base: "md", md: "lg" }}
-          textAlign={"center"}
-          color={color}
-          pt={"10px"}
-          pb={"16px"}
-        >
-          {title}
-        </Heading>
-      )}
-      {formData.type === "form-getfly" && <FormGetFly {...formData} />}
-      {formData.type === "form-sam" && <FormSam {...formData} />}
-      {formData.type === "form-google" && (
-        <FormGoogle url={formData.url} divId={formData.divId} />
-      )}
+      <Box rounded={"xl"} bg={"white"} p="10px">
+        {title && (
+          <Heading
+            as="h2"
+            fontSize={"26px"}
+            textAlign="center"
+            color={color}
+            pb="10px"
+          >
+            {title}
+          </Heading>
+        )}
+        {formData.type === "form-getfly" && <FormGetFly {...formData} />}
+        {formData.type === "form-sam" && <FormSam {...formData} />}
+        {formData.type === "form-google" && (
+          <FormGoogle url={formData.url} divId={formData.divId} />
+        )}
+      </Box>
     </>
   );
 };

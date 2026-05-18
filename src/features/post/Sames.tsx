@@ -1,5 +1,6 @@
 "use client";
 
+import { CardBlog } from "@/components/CardBlog";
 import {
   Box,
   Button,
@@ -9,13 +10,9 @@ import {
   Heading,
   SimpleGrid
 } from "@chakra-ui/react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-const CardBlog = dynamic(() =>
-  import("@/components/CardBlog").then((mod) => mod.CardBlog)
-);
+import { formatDate } from "@/ultil/date";
 
 export const SamePosts = ({ catId, id }: { catId?: string; id?: string }) => {
   const [samePosts, setSamePosts] = useState<any[]>([]);
@@ -26,7 +23,7 @@ export const SamePosts = ({ catId, id }: { catId?: string; id?: string }) => {
         if (catId) {
           // Lấy danh sách các bài viết cùng thể loại
           const res = await fetch(`/api/same-posts/?catId=${catId}&id=${id}`, {
-            next: { revalidate: 3 }
+            next: { revalidate: 300 }
           });
           if (!res.ok) {
             throw new Error(
@@ -38,23 +35,24 @@ export const SamePosts = ({ catId, id }: { catId?: string; id?: string }) => {
           if (samePosts?.length) setSamePosts(samePosts);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
     getSamePosts();
   }, [catId, id]);
+
   return (
     <>
-      <Divider pt={"32px"} />
-      <Box pt={"20px"}>
+      <Divider pt={"32px"} maxW={"7xl"} margin={"0 auto"} />
+      <Box pt={"20px"} maxW={"7xl"} margin={"0 auto"}>
         <HStack justifyContent={"space-between"} pb={"16px"}>
           <Heading as={"h3"} size={"md"}>
-            Có thể bạn quan tâm
+            Bài viết liên quan
           </Heading>
           <Button
             as={Link}
-            href={"/ban-tin"}
+            href={"/tin-tuc"}
             variant={"link"}
             colorScheme="red"
           >
@@ -62,17 +60,17 @@ export const SamePosts = ({ catId, id }: { catId?: string; id?: string }) => {
           </Button>
         </HStack>
 
-        <SimpleGrid columns={{ base: 1, md: 3, lg: 3 }} gap={"20px"}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={"20px"}>
           {samePosts.map((postCat, index) => {
             if (index < 3)
               return (
                 <GridItem key={index}>
                   <CardBlog
+                    date={postCat?.date ? formatDate(postCat.date) : ""}
                     title={postCat?.title?.rendered}
-                    desc={postCat?.excerpt?.rendered || ""}
+                    desc=""
                     image={postCat?.featured_image || ""}
-                    path={postCat.slug}
-                    imageH="150px"
+                    path={`/${postCat.slug}`}
                   />
                 </GridItem>
               );

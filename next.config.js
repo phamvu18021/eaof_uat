@@ -5,10 +5,50 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "nologin.eaof.vn",
+        hostname: "etnu.aum.edu.vn",
         pathname: "/wp-content/uploads/**"
       }
+    ],
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [384, 450, 576, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    qualities: [65, 70, 75, 80, 85, 90, 95, 100]
+  },
+  compress: true,
+  poweredByHeader: false,
+  generateEtags: true,
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Link",
+            value:
+              '<https://etnu.aum.edu.vn>; rel="preconnect", <https://www.googletagmanager.com>; rel="preconnect", <https://www.google-analytics.com>; rel="preconnect"'
+          }
+        ]
+      }
+    ];
+  },
+  experimental: {
+    optimizePackageImports: [
+      "react-icons",
+      "framer-motion",
+      "swiper",
+      "lucide-react",
+      "@heroicons/react",
+      "@chakra-ui/react"
     ]
+  },
+
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? {
+            exclude: ["error", "warn"]
+          }
+        : false
   }
 };
 

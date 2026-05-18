@@ -7,9 +7,15 @@
       "off",
       {
         "singleQuote": false,
-        "semi": true
+        "semi": true,
+        "endOfLine": "lf"
       }
     ],
-    "no-console": ["error", { "allow": ["warn", "error", "log"] }]
+    "no-console": [
+      "off",
+      {
+        "allow": ["warn", "error"]
+      }
+    ]
   }
 }

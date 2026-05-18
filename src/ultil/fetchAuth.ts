@@ -1,5 +1,4 @@
 const token = process.env.TOKEN;
-
 export const fetchAuth = ({
   url,
   method,

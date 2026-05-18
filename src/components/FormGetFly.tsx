@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 
-// Hàm tạo tham số UTM
 const buildUtmParamsForGetFly = (): string => {
   const urlParams = new URLSearchParams(window.location.search);
   const utmKeys = [
@@ -33,6 +32,7 @@ const createIframeForGetFly = (url: string): HTMLIFrameElement => {
   iframe.style.width = "100%";
   iframe.style.minHeight = "450px";
   iframe.setAttribute("frameborder", "0");
+  iframe.setAttribute("loading", "lazy");
   return iframe;
 };
 
@@ -55,7 +55,7 @@ interface FormProps {
   divClass: string;
 }
 
-export const FormGetFly: React.FC<FormProps> = ({ url, divId, divClass }) => {
+export const FormGetFly = ({ url, divId, divClass }: FormProps) => {
   useEffect(() => {
     if (url && divId) {
       attachIframeForGetFly(url);

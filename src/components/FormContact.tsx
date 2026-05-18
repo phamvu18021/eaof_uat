@@ -1,139 +1,183 @@
-import { Heading } from "@chakra-ui/react";
+"use client";
+
+import { Box, Heading } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Loading } from "./Loading";
 
-const comonForm = ({
-  uuid,
-  url,
-  size
-}: {
-  uuid: string;
-  url: string;
-  size?: { width?: string; height?: string };
-}) => {
-  if (!url) {
-    console.error("Invalid URL. Skipping iframe creation.");
-    return;
-  }
+interface IForm {
+  title?: string;
+}
+const comonForm = ({ id, href }: { id: string; href: string }) => {
+  const generateMatch = ({ utm, value }: { utm: string; value?: string }) => {
+    const valueCur = value || "=([^;]+)";
+    const matchers = document.cookie.match(new RegExp(utm + valueCur));
+    return matchers ? matchers : [];
+  };
+
+  let r =
+    window.document.referrer != ""
+      ? window.document.referrer
+      : window.location.origin;
+  const regex = /(https?:\/\/.*?)\//g;
+  const furl = regex.exec(r);
+  r = furl ? furl[0] : r;
   const f = document.createElement("iframe");
-  // const url_string = new URLSearchParams(window.location.search);
-  let class_form = document.getElementsByClassName(
-    "formio_form_iframe_container"
-  );
-  let i = 0;
-  let odoo_utm = th_get_cookie();
-  f.setAttribute("src", url + odoo_utm);
-  f.style.width = size?.width || "100%";
-  f.style.minHeight = size?.height || "450px";
-  f.classList.add("formio_form_embed");
-  for (; i < class_form.length; i++) {
-    const new_id = "formio_form_iframe_container_" + uuid + "_" + i;
-    class_form[i].id = new_id;
-    const s = document.getElementById(new_id);
-    s?.appendChild(f);
+  const url_string = new URLSearchParams(window.location.search);
+  let utm_source, utm_campaign, utm_medium, utm_content, utm_term;
+  if (
+    (!url_string.has("utm_source") || url_string.get("utm_source") == "") &&
+    generateMatch({ utm: "utm_source" }) != null
+  ) {
+    r += "&" + generateMatch({ utm: "utm_source" })[0];
+  } else {
+    r +=
+      url_string.get("utm_source") != null
+        ? "&utm_source=" + url_string.get("utm_source")
+        : "";
   }
-  function th_get_cookie() {
-    let fullUrl = window.location.href;
-    let utm_campaign = "";
-    let utm_source = "";
-    let utm_medium = "";
-
-    let th_odoo_utm_source = document.cookie.match(
-      new RegExp("odoo_utm_source" + "=([^;]+)")
-    );
-    let th_odoo_utm_campaign = document.cookie.match(
-      new RegExp("odoo_utm_campaign" + "=([^;]+)")
-    );
-    let th_odoo_utm_medium = document.cookie.match(
-      new RegExp("odoo_utm_medium" + "=([^;]+)")
-    );
-
-    if (th_odoo_utm_source != null) {
-      utm_campaign =
-        th_odoo_utm_campaign != null
-          ? "&utm_campaign=" + th_odoo_utm_campaign[0].split("=")[1]
-          : "";
-      utm_source = "?utm_source=" + th_odoo_utm_source[0].split("=")[1];
-      utm_medium =
-        th_odoo_utm_medium != null
-          ? "&utm_medium=" + th_odoo_utm_medium[0].split("=")[1]
-          : "";
-    } else {
-      let utmParams: Record<string, string> = {};
-      if (fullUrl.split("?")[1] != null) {
-        const params = new URLSearchParams(fullUrl.split("?")[1]);
-        for (const [key, val] of params) {
-          if (key.startsWith("utm_")) {
-            utmParams[key] = val;
-          }
-        }
-        utm_campaign =
-          "utm_campaign" in utmParams
-            ? "&utm_campaign=" + utmParams["utm_campaign"]
-            : "";
-        utm_source =
-          "utm_source" in utmParams
-            ? "?utm_source=" + utmParams["utm_source"]
-            : "";
-        utm_medium =
-          "utm_medium" in utmParams
-            ? "&utm_medium=" + utmParams["utm_medium"]
-            : "";
-      }
-    }
-    return fullUrl.split("?")[1] ? "?" + fullUrl.split("?")[1] : "";
+  if (
+    (!url_string.has("utm_campaign") || url_string.get("utm_campaign") == "") &&
+    generateMatch({ utm: "utm_campaign" }) != null
+  ) {
+    r += "&" + generateMatch({ utm: "utm_campaign" })[0];
+  } else {
+    r +=
+      url_string.get("utm_campaign") != null
+        ? "&utm_campaign=" + url_string.get("utm_campaign")
+        : "";
   }
+  if (
+    (!url_string.has("utm_medium") || url_string.get("utm_medium") == "") &&
+    generateMatch({ utm: "utm_medium" }) != null
+  ) {
+    r += "&" + generateMatch({ utm: "utm_medium" })[0];
+  } else {
+    r +=
+      url_string.get("utm_medium") != null
+        ? "&utm_medium=" + url_string.get("utm_medium")
+        : "";
+  }
+  if (
+    (!url_string.has("utm_content") || url_string.get("utm_content") == "") &&
+    generateMatch({ utm: "utm_content" }) != null
+  ) {
+    r += "&" + generateMatch({ utm: "utm_content" })[0];
+  } else {
+    r +=
+      url_string.get("utm_content") != null
+        ? "&utm_content=" + url_string.get("utm_content")
+        : "";
+  }
+  if (
+    (!url_string.has("utm_term") || url_string.get("utm_term") == "") &&
+    generateMatch({ utm: "utm_term" }) != null
+  ) {
+    r += "&" + generateMatch({ utm: "utm_term" })[0];
+  } else {
+    r +=
+      url_string.get("utm_term") != null
+        ? "&utm_term=" + url_string.get("utm_term")
+        : "";
+  }
+  if (
+    (!url_string.has("utm_user") || url_string.get("utm_user") == "") &&
+    generateMatch({ utm: "utm_user" }) != null
+  ) {
+    r += "&" + generateMatch({ utm: "utm_user" })[0];
+  } else {
+    r +=
+      url_string.get("utm_user") != null
+        ? "&utm_user=" + url_string.get("utm_user")
+        : "";
+  }
+  if (
+    (!url_string.has("utm_account") || url_string.get("utm_account") == "") &&
+    generateMatch({ utm: "utm_account" }) != null
+  ) {
+    r += "&" + generateMatch({ utm: "utm_account" })[0];
+  } else {
+    r +=
+      url_string.get("utm_account") != null
+        ? "&utm_account=" + url_string.get("utm_account")
+        : "";
+  }
+  r += "&full_url=" + encodeURIComponent(window.location.href);
+  r += "&full_url=" + encodeURIComponent(window.location.href);
+  f.setAttribute("src", href + r);
+  f.style.width = "100%";
+  f.style.height = "385px";
+  f.setAttribute("frameborder", "0");
+  f.setAttribute("marginheight", "0");
+  f.setAttribute("marginwidth", "0");
+  const s = document.getElementById(id);
+
+  if (!s?.hasChildNodes()) s?.appendChild(f);
 };
 
-export const FormMain = ({
+export const FormPoup = ({
   title,
-  color
+  id,
+  href
 }: {
   title?: string;
-  color?: string;
+  id?: string;
+  href?: string;
 }) => {
-  const [embed, setEmbed] = useState({
-    uuid: "",
-    url: "",
-    divClass: "",
-    divId: ""
-  });
-  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    id &&
+      href &&
+      comonForm({
+        id,
+        href
+      });
+  }, [id, href]);
+  return (
+    <Box minH={"45vh"}>
+      {title && (
+        <Heading
+          as={"h2"}
+          size={{ base: "md", md: "lg" }}
+          textAlign={"center"}
+          color={"blue.700"}
+          py={3}
+        >
+          Để lại thông tin
+        </Heading>
+      )}
+      <div id={id} />
+    </Box>
+  );
+};
 
+export const FormMain = ({ title }: { title?: string }) => {
+  const [id, setId] = useState("");
+  const [href, setHref] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const getForm = async () => {
       try {
-        const res = await fetch(`/api/data-form/?type=form_main`);
+        const res = await fetch(`/api/data-form/?type=form-main`);
         if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
+          throw new Error(`FORM fetch failed with status: ${res.statusText}`);
         }
         const data = await res.json();
-        const uuid = data?.uuid || "";
-        const url = data?.url || "";
-        const divClass = data?.divClass || "";
-        const divId = data?.divId || "";
-
-        setEmbed({
-          uuid,
-          url,
-          divClass,
-          divId
-        });
+        const id = data?.id || "";
+        id && setId(id);
+        const href = data?.href || "";
+        href && setHref(href);
         setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     getForm();
-  }, [isLoading]);
-
+  }, [id, href, isLoading]);
   useEffect(() => {
     comonForm({
-      uuid: embed.uuid,
-      url: embed.url
+      id,
+      href
     });
-  }, [embed.url, embed.uuid, isLoading]);
-
+  }, [isLoading, id, href]);
   return (
     <>
       {title && (
@@ -141,18 +185,41 @@ export const FormMain = ({
           as={"h2"}
           size={{ base: "md", md: "lg" }}
           textAlign={"center"}
-          color={color}
-          pt={"10px"}
+          color={"blue.700"}
           pb={"16px"}
         >
           {title}
         </Heading>
       )}
-
-      {isLoading && <Loading />}
-      {!isLoading && (
-        <div id={embed.divId} title="form-main" className={embed.divClass} />
-      )}
+      {isLoading && <Loading he={"38vh"} />}
+      {!isLoading && <div id={id} />}
     </>
+  );
+};
+
+export const FormPoupCTA = ({ title }: { title?: string }) => {
+  useEffect(() => {
+    comonForm({
+      id: "getfly-optin-form-iframe-1695175842605",
+      href: 'https://aum.getflycrm.com/api/forms/viewform/?key=Gks7frPWuBMzyzUC6CzH0zKCnGrO7OBcnenVzuBlKcWsplsPTm&referrer="'
+    });
+  }, []);
+
+  return (
+    <Box minH={"35vh"}>
+      {title && (
+        <Heading
+          as={"h2"}
+          size={{ base: "md", md: "lg" }}
+          textAlign={"center"}
+          color={"blue.700"}
+          pb={"16px"}
+        >
+          Để lại thông tin
+        </Heading>
+      )}
+
+      <div id="getfly-optin-form-iframe-1695175842605" />
+    </Box>
   );
 };

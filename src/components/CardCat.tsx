@@ -26,62 +26,94 @@ export const CardCat = ({
       as={Link}
       style={{ textDecoration: "none" }}
       href={path}
-      py={6}
       pos={"relative"}
-      transition={"all ease .4s"}
-      _hover={{ transform: "translateY(-4px)" }}
       className="card-blog"
       h={"100%"}
+      border={"1px solid #F1F1F1"}
+      borderRadius={"7px"}
     >
       <Flex
         flexDir={"column"}
         justify={"space-between"}
-        maxW={"445px"}
+        maxW={"527px"}
         w={"full"}
-        bg={"white"}
-        boxShadow={"2xl"}
         rounded={"sm"}
         p={6}
         overflow={"hidden"}
         h={"100%"}
       >
         <Box>
-          <Box bg={"gray.100"} mt={-6} mx={-6} mb={6} pos={"relative"}>
+          <Box
+            bg={"gray.100"}
+            mt={{ lg: -6 }}
+            mx={-6}
+            mb={6}
+            pos={"relative"}
+            height={{ lg: "auto", md: "auto", base: "auto" }}
+            onMouseEnter={(e) => {
+              const element = e.currentTarget as HTMLElement;
+              const imageElement = element.querySelector(
+                ".blog-image"
+              ) as HTMLImageElement | null;
+              if (imageElement) {
+                imageElement.style.transform = "scale(1.05)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              const element = e.currentTarget as HTMLElement;
+              const imageElement = element.querySelector(
+                ".blog-image"
+              ) as HTMLImageElement | null;
+              if (imageElement) {
+                imageElement.style.transform = "scale(1.0)";
+              }
+            }}
+          >
             <Image
-              width={600}
-              height={350}
+              width={326}
+              height={450}
+              quality={75}
               src={image || `/blog.jpg`}
               alt={title}
-              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+              style={{
+                objectFit: "cover",
+                width: "100%",
+                height: "auto",
+                transition: "0.3s ease-in-out"
+              }}
+              className="blog-image"
             />
           </Box>
           <Stack>
             <Heading
               className="event-heading"
-              color={"gray.700"}
-              fontSize={{ base: "sm", lg: "md" }}
+              color={"#030d47"}
+              fontSize={{ base: "sm", lg: "20px" }}
               fontFamily={"body"}
-              _hover={{ color: "red.400" }}
+              _hover={{ color: "#0d6efd" }}
               css={{
                 display: "-webkit-box",
                 WebkitLineClamp: "2",
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
-                textOverflow: "ellipsis"
+                textOverflow: "ellipsis",
+                textAlign: "center"
               }}
             >
               {title}
             </Heading>
             {isMounted && (
               <Text
-                color={"gray.500"}
-                fontSize={".8rem"}
+                color={"#565872"}
+                fontSize={"16px"}
                 css={{
                   display: "-webkit-box",
                   WebkitLineClamp: "4",
                   WebkitBoxOrient: "vertical",
                   overflow: "hidden",
-                  textOverflow: "ellipsis"
+                  textOverflow: "ellipsis",
+                  textAlign: "justify"
                 }}
                 dangerouslySetInnerHTML={{ __html: desc }}
               />

@@ -1,18 +1,11 @@
 "use client";
 
+import { CardBlog } from "@/components/CardBlog";
 import { Loading } from "@/components/Loading";
 import { clean } from "@/lib/sanitizeHtml";
 import { formatDate } from "@/ultil/date";
 import { Box, Center, Container, GridItem, SimpleGrid } from "@chakra-ui/react";
-import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-
-const CardBlog = dynamic(() =>
-  import("@/components/CardBlog").then((mod) => mod.CardBlog)
-);
-const HeadSection = dynamic(() =>
-  import("@/components/HeadSection").then((mod) => mod.HeadSection)
-);
 
 export const LatestPost = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -23,7 +16,7 @@ export const LatestPost = () => {
       setIsLoading(true);
       try {
         const res = await fetch(`/api/posts/?page=${1}`, {
-          next: { revalidate: 3 }
+          next: { revalidate: 300 }
         });
         if (!res.ok) {
           throw new Error(`Posts fetch failed with status: ${res.statusText}`);
@@ -32,7 +25,7 @@ export const LatestPost = () => {
         const { posts } = data;
         posts?.length && setPosts(posts);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
       setIsLoading(false);
     };
@@ -52,11 +45,6 @@ export const LatestPost = () => {
   return (
     <Box>
       <Container maxW={"6xl"} py={{ base: "32px", md: "48px" }}>
-        <HeadSection
-          title="Danh sách bài viết vừa xuất bản"
-          subtitle="bài viết mới"
-          desc="Danh sách 09 bài viết vừa xuất bản gần đây"
-        />
         <SimpleGrid
           columns={{ base: 1, md: 2, lg: 3 }}
           spacing={{ base: "16px", md: "24px" }}
@@ -67,7 +55,7 @@ export const LatestPost = () => {
                 date={post?.date ? formatDate(post.date) : ""}
                 key={index}
                 title={post?.title?.rendered}
-                desc={clean(post?.excerpt?.rendered)}
+                desc={clean(post.excerpt.rendered)}
                 image={post?.featured_image || ""}
                 path={`/bai-viet-moi/${post?.slug}`}
               />

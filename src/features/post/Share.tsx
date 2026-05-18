@@ -1,8 +1,13 @@
 "use client";
-
-import { IconButton, Stack } from "@chakra-ui/react";
-import Image from "next/image";
+import { FormMain } from "@/components/FormContact";
+import { FormWrapper } from "@/components/FormWrapper";
+import { ScrollView } from "@/components/ScrollView";
+import { Box, Heading } from "@chakra-ui/react";
+import { Icon, IconButton, Stack } from "@chakra-ui/react";
 import Link from "next/link";
+import { BsLink45Deg } from "react-icons/bs";
+import { FiMail } from "react-icons/fi";
+import { ImFacebook } from "react-icons/im";
 
 export const Share = ({ url }: { url?: string }) => {
   const domain = process.env.NEXT_PUBLIC_DOMAIN || "";
@@ -24,16 +29,7 @@ export const Share = ({ url }: { url?: string }) => {
       top={"120px"}
     >
       <IconButton
-        icon={
-          <Image
-            alt="icon"
-            src={"/s-facebooksss.svg"}
-            width={64}
-            height={64}
-            priority
-            style={{ width: "18x", height: "auto" }}
-          />
-        }
+        icon={<Icon as={ImFacebook} w={"18px"} h={"18px"} />}
         as={Link}
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
           `${domain}/${url}`
@@ -42,46 +38,43 @@ export const Share = ({ url }: { url?: string }) => {
         rel="noopener noreferrer"
         aria-label="facebook"
         rounded={"full"}
-        p={"8px"}
+        p={"16px"}
         variant={"outline"}
         w={"35px"}
+        _hover={{}}
       />
+
+      <Box pt={"24px"} className="fromsign" display={"none"}>
+        <Heading
+          as={"h3"}
+          size={"sm"}
+          pb={"20px"}
+          textAlign={{ base: "center", lg: "center" }}
+        >
+          ĐĂNG KÝ NGAY ĐỂ NHẬN TƯ VẤN
+        </Heading>
+        <ScrollView>
+          <FormWrapper type="form-main" />
+        </ScrollView>
+      </Box>
       <IconButton
-        icon={
-          <Image
-            alt="icon"
-            src={"/s-mails.svg"}
-            width={64}
-            height={64}
-            priority
-            style={{ width: "18x", height: "auto" }}
-          />
-        }
+        icon={<Icon as={FiMail} w={"18px"} h={"18px"} />}
         as={Link}
         href={`mailto:?subject=${encodeURIComponent(
           "Bài viết trang Evstep"
         )}&body=${encodeURIComponent(`Xem bài viết tại: ${domain}/${url}`)}`}
         aria-label="email"
         rounded={"full"}
-        p={"8px"}
+        p={"16px"}
         variant={"outline"}
         w={"35px"}
       />
       <IconButton
-        icon={
-          <Image
-            alt="icon"
-            src={"/s-share.svg"}
-            width={64}
-            height={64}
-            priority
-            style={{ width: "18x", height: "auto" }}
-          />
-        }
+        icon={<Icon as={BsLink45Deg} w={"18px"} h={"18px"} />}
         aria-label="link"
         rounded={"full"}
         variant={"outline"}
-        p={"8px"}
+        p={"16px"}
         w={"35px"}
         onClick={handleCopyLink}
       />

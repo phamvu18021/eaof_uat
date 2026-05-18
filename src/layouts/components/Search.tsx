@@ -9,11 +9,12 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  Icon,
   Input,
   useDisclosure
 } from "@chakra-ui/react";
-import Image from "next/image";
-import { useRef } from "react";
+import React, { useRef } from "react";
+import { FiSearch } from "react-icons/fi";
 
 export const Search = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -22,14 +23,7 @@ export const Search = () => {
   return (
     <>
       <Button ref={btnRef} colorScheme="outline" onClick={onOpen}>
-        <Image
-          alt={"home image"}
-          src={"/s-search.svg"}
-          width={64}
-          height={64}
-          priority
-          style={{ width: "25px", height: "auto", marginRight: "10px" }}
-        />
+        <Icon as={FiSearch} w={"24px"} h={"24px"} color="gray.800" />
       </Button>
       <Drawer
         isOpen={isOpen}
@@ -41,11 +35,9 @@ export const Search = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Tìm kiếm bài viết</DrawerHeader>
-
           <DrawerBody>
-            <Input placeholder="Nhập dữ liệu..." />
+            <Input required placeholder="Nhập dữ liệu..." />
           </DrawerBody>
-
           <DrawerFooter>
             <Button variant="outline" rounded={"sm"} mr={3} onClick={onClose}>
               Hủy

@@ -1,74 +1,92 @@
 import {
+  Box,
   Container,
-  Divider,
   Flex,
-  HStack,
+  Icon,
+  Link,
   Text,
-  VStack
+  chakra,
+  VisuallyHidden
 } from "@chakra-ui/react";
-import dynamic from "next/dynamic";
-import Image from "next/image";
+import { ReactNode } from "react";
+import { MdOutlineMail } from "react-icons/md";
+import { LuPhone } from "react-icons/lu";
+import { Logo } from "./Logo";
 
-const Logo = dynamic(() =>
-  import("@/layouts/components/Logo").then((mod) => mod.Logo)
-);
-const ScrollView = dynamic(() =>
-  import("@/components/ScrollView").then((mod) => mod.ScrollView)
-);
-
-const International = ({ header }: any) => {
+export const SocialButton = ({
+  children,
+  label,
+  href,
+  bagr
+}: {
+  children: ReactNode;
+  label: string;
+  href: string;
+  bagr: string;
+}) => {
   return (
-    <HStack color={"whiteAlpha.800"} spacing={6}>
-      <Flex alignItems={"center"}>
-        <Image
-          alt={"home image"}
-          src={"/s-phone1.svg"}
-          width={64}
-          height={64}
-          priority
-          style={{ width: "25px", height: "auto", marginRight: "10px" }}
-        />
-        <VStack color="white" fontSize={{ base: ".5rem", lg: "15px" }}>
-          <Text fontWeight={600}>
-            {header?.desc_1 || "Hotline: 094.162.8017"}
-          </Text>
-          <Divider borderColor={"gray.400"} />
-          <Text>{header?.desc_2 || "Thứ 2 - Thứ 7"}</Text>
-        </VStack>
-      </Flex>
-      <Flex alignItems={"center"}>
-        <Image
-          alt={"home image"}
-          src={"/s-site1.svg"}
-          width={64}
-          height={64}
-          priority
-          style={{ width: "25px", height: "auto", marginRight: "10px" }}
-        />
-        <VStack color="white" fontSize={{ base: ".5rem", lg: "15px" }}>
-          <Text fontWeight={600}>
-            {header?.title || "Trạm Tuyển Sinh - AUM"}
-          </Text>
-          <Divider borderColor={"gray.400"} />
-          <Text>
-            {header?.desc || "116 Trần Vỹ, Mai Dịch, Cầu Giấy, Hà Nội"}
-          </Text>
-        </VStack>
-      </Flex>
-    </HStack>
+    <chakra.button
+      bg={bagr}
+      rounded={"md"}
+      w={8}
+      h={8}
+      cursor={"pointer"}
+      as={"a"}
+      href={href}
+      display={"inline-flex"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      border={"1.8px solid #cbd5e1"}
+    >
+      <VisuallyHidden>{label}</VisuallyHidden>
+      {children}
+    </chakra.button>
   );
 };
 
-export const HeaderTop = ({ header }: any) => {
+export const HeaderTop = () => {
   return (
-    <Container maxW={"6xl"}>
-      <HStack align={"center"} justify={"space-between"} w={"100%"}>
-        <ScrollView>
-          <Logo color={"#007180"} />
-        </ScrollView>
+    <Box borderBottom="1px solid" borderColor="gray.200" bg="white">
+      <Container maxW="7xl">
+        <Flex h="16" alignItems="center" justifyContent="space-between" gap={4}>
+          {/* Logo and Title */}
+          <Flex alignItems="center" gap={2}>
+            <Logo />
+          </Flex>
 
-        <International header={header} />
-      </HStack>
-    </Container>
+          {/* Contact info */}
+          <Flex alignItems="center" gap={6}>
+            <Link
+              href="tel:0914709118"
+              aria-label="Gọi hotline: 0914709118"
+              display="flex"
+              alignItems="center"
+              gap={2}
+              fontSize="sm"
+              color="gray.700"
+              _hover={{ textDecoration: "none", color: "blue.500" }}
+            >
+              <Icon as={LuPhone} boxSize={4} />
+              <Text display={{ base: "none", sm: "inline" }}>0914709118</Text>
+            </Link>
+            <Link
+              href="mailto:daihoctructuyen@tnu.edu.vn"
+              aria-label="Gửi email: daihoctructuyen@tnu.edu.vn"
+              display="flex"
+              alignItems="center"
+              gap={2}
+              fontSize="sm"
+              color="gray.700"
+              _hover={{ textDecoration: "none", color: "blue.500" }}
+            >
+              <Icon as={MdOutlineMail} boxSize={4} />
+              <Text display={{ base: "none", sm: "inline" }}>
+                daihoctructuyen@tnu.edu.vn
+              </Text>
+            </Link>
+          </Flex>
+        </Flex>
+      </Container>
+    </Box>
   );
 };

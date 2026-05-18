@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/router";
 
 // Hàm đọc các trường từ sessionStorage
 const getTrackingParamsFromSession = (): string => {
@@ -11,24 +10,19 @@ const getTrackingParamsFromSession = (): string => {
     "utm_medium",
     "utm_content",
     "utm_term",
-    "utm_referrer",
-    "utm_id"
+    "utm_referrer"
   ];
 
-  const saved = sessionStorage.getItem("utm_data");
-  if (saved) {
-    const storedData = JSON.parse(saved);
-    const queryParams = new URLSearchParams();
+  const queryParams = new URLSearchParams();
 
-    keys.forEach((key) => {
-      if (storedData[key]) {
-        queryParams.set(key, storedData[key]);
-      }
-    });
-    return queryParams.toString();
-  }
+  keys.forEach((key) => {
+    const value = sessionStorage.getItem(key);
+    if (value && value.trim() !== "") {
+      queryParams.set(key, value);
+    }
+  });
 
-  return "";
+  return queryParams.toString(); // Ví dụ: utm_source=zalo&utm_campaign=test...
 };
 
 // Hàm tạo iframe
@@ -43,10 +37,10 @@ const createIframeForSam = (
   const iframe = document.createElement("iframe");
   iframe.setAttribute("src", fullUrl);
   iframe.style.width = "100%";
-  iframe.title = "Form Sam";
-  iframe.style.minHeight = "450px";
-  iframe.style.height = "100% !important";
+  iframe.style.minHeight = "380px";
   iframe.classList.add(divClass);
+  iframe.setAttribute("title", fullUrl);
+  iframe.setAttribute("loading", "lazy");
   return iframe;
 };
 
@@ -79,18 +73,11 @@ export const FormSam: React.FC<FormProps> = ({
   divId,
   divClass
 }) => {
-  const router = useRouter();
-
   useEffect(() => {
     if (url && divClass) {
-      // Xóa iframe cũ để cập nhật URL mới chứa UTM từ session theo router.asPath
-      const container = document.getElementById(divId);
-      if (container) {
-        container.innerHTML = "";
-      }
       attachIframeForSam(url, uuid, divId, divClass);
     }
-  }, [url, uuid, divId, divClass, router.asPath]);
+  }, [url, uuid, divId, divClass]);
 
   return <div id={divId} className={divClass}></div>;
 };

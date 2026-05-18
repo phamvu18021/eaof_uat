@@ -11,25 +11,16 @@ import {
   Input,
   Text
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-
-const ListSearchPosts = dynamic(() =>
-  import("@/features/search/ListSearchPosts").then((mod) => mod.ListSearchPosts)
-);
+import { ListSearchPosts } from "./ListSearchPosts";
 
 export const Search = () => {
-  const router = useRouter();
-
   const [searchQuery, setSearchQuery] = useState("");
   const [keyWord, setKeyWord] = useState<any>();
   const [isCorrect, setIsCorrect] = useState(false);
-
-  const handleRouter = ({ selected }: { selected: number }) => {
-    router.push(`/tim-kiem?keyword=${keyWord}&page=${selected + 1}`);
-  };
-
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const str = toSlug({ input: searchQuery });
@@ -40,7 +31,6 @@ export const Search = () => {
       setIsCorrect(true);
     }
   };
-
   useEffect(() => {
     const str = toSlug({ input: searchQuery });
     if (searchQuery != "" && str == "") {
@@ -51,38 +41,38 @@ export const Search = () => {
   }, [searchQuery]);
 
   useEffect(() => {
-    const { keyword } = router.query;
-    setKeyWord(
-      Array.isArray(keyword) ? keyword[0] || "" : (keyword as string) || ""
-    );
-  }, [router.query]);
+    const keyword = searchParams.get("keyword") || "";
+    setKeyWord(keyword);
+  }, [searchParams]);
+
+  const handleRouter = ({ selected }: { selected: number }) => {
+    router.push(`/tim-kiem?keyword=${keyWord}&page=${selected + 1}`);
+  };
 
   return (
     <>
       <Box
-        w={"100%"}
-        bg="rgba(0, 0, 0, 0)"
-        bgSize="cover"
-        bgRepeat={"no-repeat"}
-        position="relative"
+        height={"350px"}
+        position={"relative"}
+        py="120"
+        display={"flex"}
+        flexDirection="column"
+        alignItems={"center"}
+        justifyContent={"flex-start"}
       >
         <Box
-          pos="absolute"
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          bgImage="/bg-gt.jpg"
-          zIndex={-1}
-          filter="auto"
-          brightness="40%"
-          bgSize="cover"
-          bgRepeat={"no-repeat"}
-          bgPosition={"0 15%"}
+          position="absolute"
+          top="0"
+          left="0"
+          w={"100%"}
+          h={"100%"}
+          bgColor={"#07294dc0"}
+          opacity={0.8}
+          zIndex={"1"}
         ></Box>
-        <Container maxW={"6xl"} py="150px">
+        <Container maxW={"7xl"} zIndex={2}>
           <Box>
-            <Box justifyContent={"center"} pb={5}>
+            <Box justifyContent={"center"} pt={"80px"}>
               <form onSubmit={onSearch}>
                 <HStack justifyContent={"center"} columnGap={0}>
                   <Input
@@ -95,18 +85,21 @@ export const Search = () => {
                     color={"black"}
                     maxW={"2xl"}
                     size="lg"
-                    focusBorderColor="#007bff"
+                    focusBorderColor="#008AFA"
                     placeholder="Nhập vào từ khóa..."
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                   <Button
                     borderRadius={"0 15px 15px 0"}
                     onClick={onSearch}
-                    color={"#ffffff"}
+                    color={"#131313"}
                     size="lg"
-                    bg={"#007bff"}
+                    border={"2px solid #008AFA"}
+                    bg={"#008AFA"}
                     transition={"ease-in-out .4s"}
                     _hover={{
+                      border: "2px solid #008AFA",
+                      background: "white",
                       color: " #131313",
                       transition: "0.4s ease-in-out"
                     }}
@@ -118,18 +111,19 @@ export const Search = () => {
             </Box>
             {isCorrect && (
               <Box
-                pt={1}
+                pt={2}
                 display={"flex"}
-                color={"#f5222d"}
+                color={"white"}
                 justifyContent={"center"}
               >
-                <Text>Từ khóa tìm kiếm không hợp lệ</Text>
+                <Text>Tìm kiếm của bạn mang lại không có kết quả.</Text>
               </Box>
             )}
           </Box>
         </Container>
       </Box>
-      <Container maxW={"6xl"} py={"70px"}>
+
+      <Container maxW={"8xl"} py={"70px"}>
         <Box minH={"300px"}>
           {keyWord !== "" && (
             <>
@@ -139,7 +133,7 @@ export const Search = () => {
                 pb={"40px"}
                 textAlign={{ base: "center", lg: "center" }}
               >
-                Kết quả trả về cho từ khóa : {deleteSpace(keyWord)}
+                Kết quả tìm kiếm : {deleteSpace(keyWord)}
               </Heading>
               <ListSearchPosts handleRouter={handleRouter} />
             </>

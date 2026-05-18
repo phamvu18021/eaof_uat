@@ -13,7 +13,7 @@ export const pageview = (url: string) => {
       page: url
     });
   } else {
-    console.log({
+    console.error({
       event: "pageview",
       page: url
     });

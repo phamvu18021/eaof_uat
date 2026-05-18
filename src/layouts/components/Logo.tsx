@@ -1,32 +1,28 @@
-import { Box, Heading, VStack } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 
-export const Logo = ({ color }: { color?: string }) => {
+export const Logo = () => {
   return (
     <Link
       href="/"
-      style={{ display: "flex", alignItems: "center", gap: "12px" }}
+      style={{ display: "flex", alignItems: "center", gap: "10px" }}
     >
-      <Box w={"80px"} h={"80px"}>
-        <Image
-          priority
-          width={80}
-          height={80}
-          style={{ borderRadius: "50%", width: "100%", height: "auto" }}
-          src={`/logo.png`}
-          alt="logo aof"
-        />
-      </Box>
-
-      <VStack color={color} align={"start"}>
-        <Heading as="h1" size={{ base: "sm", lg: "md" }}>
-          Học Viện Tài Chính
-        </Heading>
-        <Heading as="h2" fontSize={{ base: ".8rem" }}>
-          Trung tâm đào tạo từ xa
-        </Heading>
-      </VStack>
+      <Image
+        priority
+        width={50}
+        height={50}
+        src={`/logo-dhthainguyen.webp`}
+        alt="logo DHTN "
+        style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+      />
+      <Text
+        fontSize={{ base: "md", md: "xl" }}
+        fontWeight="bold"
+        color="gray.800"
+      >
+        Đại học Thái Nguyên
+      </Text>
     </Link>
   );
 };

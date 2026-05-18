@@ -1,244 +1,84 @@
 export const replaceSeoRM = (input: string) => {
   input = input.replace(
-    `link rel="canonical" href="https://nologin.eaof.vn`,
-    `link rel="canonical" href="https://eaof.vn`
+    `link rel="canonical" href="https://etnu.aum.edu.vn`,
+    `link rel="canonical" href="https://etnu.edu.vn`
+  );
+  input = input.replace(
+    `meta property="og:url" content="https://etnu.aum.edu.vn`,
+    `meta property="og:url" content="https://etnu.edu.vn`
   );
 
   input = input.replace(
-    `meta property="og:url" content="https://nologin.eaof.vn`,
-    `meta property="og:url" content="https://eaof.vn`
+    `"@id":"https://etnu.aum.edu.vn/#organization"`,
+    `"@id":"https://etnu.edu.vn/#organization"`
+  );
+  input = input.replace(
+    `https://etnu.aum.edu.vn/#logo`,
+    `https://etnu.edu.vn/#logo`
+  );
+  input = input.replace(
+    `https://etnu.aum.edu.vn/#website`,
+    `https://etnu.edu.vn/#website`
+  );
+  input = input.replace(
+    `https://etnu.aum.edu.vn/#webpage`,
+    `https://etnu.edu.vn/#webpage`
+  );
+  input = input.replace(
+    `"url":"https://etnu.aum.edu.vn"`,
+    `"url":"https://etnu.edu.vn"`
   );
 
   input = input.replace(
-    `"@id":"https://nologin.eaof.vn/#organization"`,
-    `"@id":"https://eaof.vn/#organization"`
+    `"@type":"WebPage","@id":"https://etnu.aum.edu.vn`,
+    `"@type":"WebPage","@id":"https://etnu.edu.vn`
   );
 
   input = input.replace(
-    `https://nologin.eaof.vn/#logo`,
-    `https://eaof.vn/#logo`
+    `#webpage","url":"https://etnu.aum.edu.vn`,
+    `#webpage","url":"https://etnu.edu.vn`
   );
 
   input = input.replace(
-    `https://nologin.eaof.vn/#website`,
-    `https://eaof.vn/#website`
+    `"mainEntityOfPage":{"@id":"https://etnu.aum.edu.vn/`,
+    `"mainEntityOfPage":{"@id":"https://etnu.edu.vn/`
   );
   input = input.replace(
-    `https://nologin.eaof.vn/#webpage`,
-    `https://eaof.vn/#webpage`
-  );
-  input = input.replace(
-    `"url":"https://nologin.eaof.vn"`,
-    `"url":"https://eaof.vn"`
+    `"worksFor":{"@id":"https://etnu.aum.edu.vn/#organization`,
+    `"worksFor":{"@id":"https://etnu.edu.vn/#organization`
   );
 
   input = input.replace(
-    `"@type":"WebPage","@id":"https://nologin.eaof.vn`,
-    `"@type":"WebPage","@id":"https://eaof.vn`
-  );
-
-  input = input.replace(
-    `#webpage","url":"https://nologin.eaof.vn`,
-    `#webpage","url":"https://eaof.vn`
-  );
-
-  input = input.replace(
-    `"mainEntityOfPage":{"@id":"https://nologin.eaof.vn`,
-    `"mainEntityOfPage":{"@id":"https://eaof.vn/`
-  );
-  input = input.replace(
-    `"worksFor":{"@id":"https://nologin.eaof.vn/#organization`,
-    `"worksFor":{"@id":"https://eaof.vn/#organization`
-  );
-
-  input = input.replace(
-    `"sameAs":["https://nologin.eaof.vn"]`,
-    `"sameAs":["https://eaof.vn"]`
+    `"sameAs":["https://etnu.aum.edu.vn"]`,
+    `"sameAs":["https://etnu.edu.vn"]`
   );
   input = input.replace("noindex", "index");
   input = input.replace("nofollow", "follow");
-  return input;
-};
 
-export const replaceSeoRMSlug = (input: string | null) => {
-  if (!input) return "";
-  input = input.replace(
-    `link rel="canonical" href="https://nologin.eaof.vn/`,
-    `link rel="canonical" href="https://eaof.vn/tin-tuc/`
+  // === Thêm canonical nếu chưa có ===
+  const ogUrlMatch = input.match(
+    /<meta[^>]*property=["']og:url["'][^>]*content=["']([^"']+)["'][^>]*>/
   );
-  input = input.replace(
-    `meta property="og:url" content="https://nologin.eaof.vn`,
-    `meta property="og:url" content="https://eaof.vn/tin-tuc`
-  );
+  const hasCanonical = /<link[^>]*rel=["']canonical["']/.test(input);
 
+  if (ogUrlMatch && !hasCanonical) {
+    // Xóa dấu / ở cuối ogUrl nếu có
+    const ogUrl = ogUrlMatch[1].replace(/\/$/, "");
+    const canonicalTag = `<link rel="canonical" href="${ogUrl}" />`;
+
+    // Thêm ngay sau thẻ og:url
+    input = input.replace(ogUrlMatch[0], `${ogUrlMatch[0]}\n${canonicalTag}`);
+  }
+
+  // Đảm bảo tất cả thẻ canonical và og:url không có dấu / ở cuối URL
   input = input.replace(
-    `"@id":"https://nologin.eaof.vn/#organization"`,
-    `"@id":"https://eaof.vn/#organization"`
+    /(<link\s+rel=["']canonical["']\s+href=["'][^"']+)\/+(["'])/g,
+    "$1$2"
   );
   input = input.replace(
-    `https://nologin.eaof.vn/#logo`,
-    `https://eaof.vn/#logo`
-  );
-  input = input.replace(
-    `https://nologin.eaof.vn/#website`,
-    `https://eaof.vn/#website`
-  );
-  input = input.replace(
-    `https://nologin.eaof.vn/#webpage`,
-    `https://eaof.vn/#webpage`
-  );
-  input = input.replace(
-    `"url":"https://nologin.eaof.vn"`,
-    `"url":"https://eaof.vn"`
+    /(<meta\s+property=["']og:url["']\s+content=["'][^"']+)\/+(["'])/g,
+    "$1$2"
   );
 
-  input = input.replace(
-    `"@type":"WebPage","@id":"https://nologin.eaof.vn`,
-    `"@type":"WebPage","@id":"https://eaof.vn/tin-tuc`
-  );
-
-  input = input.replace(
-    `#webpage","url":"https://nologin.eaof.vn`,
-    `#webpage","url":"https://eaof.vn/tin-tuc`
-  );
-
-  input = input.replace(
-    `"mainEntityOfPage":{"@id":"https://nologin.eaof.vn/`,
-    `"mainEntityOfPage":{"@id":"https://eaof.vn/`
-  );
-  input = input.replace(
-    `"worksFor":{"@id":"https://nologin.eaof.vn/#organization`,
-    `"worksFor":{"@id":"https://eaof.vn/#organization`
-  );
-
-  input = input.replace(
-    `"sameAs":["https://nologin.eaof.vn"]`,
-    `"sameAs":["https://eaof.vn/tin-tuc"]`
-  );
-
-  input = input.replace("noindex", "index");
-  input = input.replace("nofollow", "follow");
-  return input;
-};
-
-export const replaceSeoRMSlugTB = (input: string | null) => {
-  if (!input) return "";
-  input = input.replace(
-    `link rel="canonical" href="https://nologin.eaof.vn/`,
-    `link rel="canonical" href="https://eaof.vn/thong-bao/`
-  );
-  input = input.replace(
-    `meta property="og:url" content="https://nologin.eaof.vn`,
-    `meta property="og:url" content="https://eaof.vn/thong-bao`
-  );
-
-  input = input.replace(
-    `"@id":"https://nologin.eaof.vn/#organization"`,
-    `"@id":"https://eaof.vn/#organization"`
-  );
-  input = input.replace(
-    `https://nologin.eaof.vn/#logo`,
-    `https://eaof.vn/#logo`
-  );
-  input = input.replace(
-    `https://nologin.eaof.vn/#website`,
-    `https://eaof.vn/#website`
-  );
-  input = input.replace(
-    `https://nologin.eaof.vn/#webpage`,
-    `https://eaof.vn/#webpage`
-  );
-  input = input.replace(
-    `"url":"https://nologin.eaof.vn"`,
-    `"url":"https://eaof.vn"`
-  );
-
-  input = input.replace(
-    `"@type":"WebPage","@id":"https://nologin.eaof.vn`,
-    `"@type":"WebPage","@id":"https://eaof.vn/thong-bao`
-  );
-
-  input = input.replace(
-    `#webpage","url":"https://nologin.eaof.vn`,
-    `#webpage","url":"https://eaof.vn/thong-bao`
-  );
-
-  input = input.replace(
-    `"mainEntityOfPage":{"@id":"https://nologin.eaof.vn/`,
-    `"mainEntityOfPage":{"@id":"https://eaof.vn/`
-  );
-  input = input.replace(
-    `"worksFor":{"@id":"https://nologin.eaof.vn/#organization`,
-    `"worksFor":{"@id":"https://eaof.vn/#organization`
-  );
-
-  input = input.replace(
-    `"sameAs":["https://nologin.eaof.vn"]`,
-    `"sameAs":["https://eaof.vn/thong-bao"]`
-  );
-
-  input = input.replace("noindex", "index");
-  input = input.replace("nofollow", "follow");
-  return input;
-};
-
-export const replaceSeoRMSlugBantin = (input: string | null) => {
-  if (!input) return "";
-  input = input.replace(
-    `link rel="canonical" href="https://nologin.eaof.vn/`,
-    `link rel="canonical" href="https://eaof.vn/ban-tin/`
-  );
-  input = input.replace(
-    `meta property="og:url" content="https://nologin.eaof.vn`,
-    `meta property="og:url" content="https://eaof.vn/ban-tin`
-  );
-
-  input = input.replace(
-    `"@id":"https://nologin.eaof.vn/#organization"`,
-    `"@id":"https://eaof.vn/#organization"`
-  );
-  input = input.replace(
-    `https://nologin.eaof.vn/#logo`,
-    `https://eaof.vn/#logo`
-  );
-  input = input.replace(
-    `https://nologin.eaof.vn/#website`,
-    `https://eaof.vn/#website`
-  );
-  input = input.replace(
-    `https://nologin.eaof.vn/#webpage`,
-    `https://eaof.vn/#webpage`
-  );
-  input = input.replace(
-    `"url":"https://nologin.eaof.vn"`,
-    `"url":"https://eaof.vn"`
-  );
-
-  input = input.replace(
-    `"@type":"WebPage","@id":"https://nologin.eaof.vn`,
-    `"@type":"WebPage","@id":"https://eaof.vn/ban-tin`
-  );
-
-  input = input.replace(
-    `#webpage","url":"https://nologin.eaof.vn`,
-    `#webpage","url":"https://eaof.vn/ban-tin`
-  );
-
-  input = input.replace(
-    `"mainEntityOfPage":{"@id":"https://nologin.eaof.vn/`,
-    `"mainEntityOfPage":{"@id":"https://eaof.vn/`
-  );
-  input = input.replace(
-    `"worksFor":{"@id":"https://nologin.eaof.vn/#organization`,
-    `"worksFor":{"@id":"https://eaof.vn/#organization`
-  );
-
-  input = input.replace(
-    `"sameAs":["https://nologin.eaof.vn"]`,
-    `"sameAs":["https://eaof.vn/ban-tin"]`
-  );
-
-  input = input.replace("noindex", "index");
-  input = input.replace("nofollow", "follow");
   return input;
 };

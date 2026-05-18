@@ -1,37 +1,51 @@
 "use client";
 
+import { CardBlog } from "@/components/CardBlog";
 import { Loading } from "@/components/Loading";
 import { clean } from "@/lib/sanitizeHtml";
 import { formatDate } from "@/ultil/date";
 import { toSlug } from "@/ultil/toSlug";
-import { Box, Center, Grid, GridItem, HStack } from "@chakra-ui/react";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
+import { Box, Center, GridItem, HStack, SimpleGrid } from "@chakra-ui/react";
+import styled from "@emotion/styled";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 
-const CardBlog = dynamic(() =>
-  import("@/components/CardBlog").then((mod) => mod.CardBlog)
-);
-const StyledPaginate = dynamic(() =>
-  import("@/features/posts/ListPosts").then((mod) => mod.StyledPaginate)
-);
+const StyledPaginate = styled(ReactPaginate)`
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  list-style-type: none;
+  padding: 0 1rem;
 
-export interface TypePost {
-  title: {
-    rendered: string;
-  };
-  date: string;
-  excerpt: {
-    rendered: string;
-  };
-  featured_image: string;
-  slug: string;
-  categories?: number[];
-  content?: {
-    rendered: string;
-  };
-  id?: number;
-}
+  li a {
+    border-radius: 7px;
+    padding: 0.1rem 0.5rem;
+    border: gray 1px solid;
+    cursor: pointer;
+    margin-right: 3px;
+    margin-left: 3px;
+  }
+  li.previous a,
+  li.next a,
+  li.break a {
+    border-color: transparent;
+  }
+  li.active a {
+    background-color: #003163;
+    border-color: transparent;
+    color: white;
+    min-width: 24px;
+  }
+  li.disabled a {
+    color: grey;
+  }
+  li.disable,
+  li.disabled a {
+    cursor: default;
+  }
+`;
 
 export const ListSearchPosts = ({
   handleRouter
@@ -46,99 +60,73 @@ export const ListSearchPosts = ({
     searchText: string;
   }) => void;
 }) => {
-  const router = useRouter();
-
-  const [posts, setPosts] = useState<TypePost[]>([]);
+  const [posts, setPosts] = useState<any[]>([]);
   const [totalPosts, setTotalPosts] = useState("0");
   const [isLoading, setIsLoading] = useState(true);
   const [resetpagi, setResetpagi] = useState(false);
-  const len = Math.ceil(Number(totalPosts) / 12);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
+    const page = searchParams.get("page") || "1";
     setResetpagi(true);
-  }, [router.query.page]);
+  }, [searchParams]);
 
   useEffect(() => {
-    const { keyword, page } = router.query;
-    let keywords = Array.isArray(keyword)
-      ? keyword[0] || ""
-      : (keyword as string) || "";
-    var pages = Number(
-      Array.isArray(page) ? page[0] || "" : (page as string) || ""
-    );
+    const keyword = searchParams.get("keyword") || "";
+    const page = searchParams.get("page") || "1";
+    const pages = Number(page);
 
     const getPosts = async () => {
       setIsLoading(true);
       try {
         const res = await fetch(
-          `/api/search/?page=${pages}&search=${toSlug({
+          `/api/search/?type=news&page=${pages}&search=${toSlug({
             type: "signed",
-            input: keywords
+            input: keyword
           })}`,
           {
-            next: { revalidate: 3 }
+            next: { revalidate: 300 }
           }
         );
         if (!res.ok) {
           throw new Error(`Posts fetch failed with status: ${res.statusText}`);
         }
-        const data: { posts: TypePost[]; totalPosts: string } =
-          await res.json();
+        const data: { posts: any[]; totalPosts: string } = await res.json();
         const { posts, totalPosts } = data;
         totalPosts && setTotalPosts(totalPosts);
         setPosts(posts);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
       setIsLoading(false);
       setResetpagi(false);
     };
     getPosts();
-  }, [router.query]);
+  }, [searchParams]);
+
+  const len = Math.ceil(Number(totalPosts) / 8);
 
   return (
     <>
       <Box>
         {!isLoading && (
-          <>
-            <Grid
-              templateColumns={{
-                base: "1fr",
-                md: "repeat(2, 1fr)",
-                lg: "repeat(3, 1fr)"
-              }}
-              gap={{ lg: "30px", md: "40px", base: "45px" }}
-            >
-              {posts?.map((post: TypePost, index: number) => (
-                <GridItem key={index}>
-                  <CardBlog
-                    date={post?.date ? formatDate(post.date) : ""}
-                    title={clean(post?.title?.rendered)}
-                    tag="Tin tức"
-                    bgTag="red.500"
-                    desc={clean(post?.excerpt?.rendered)}
-                    image={post?.featured_image || ""}
-                    path={`/${post?.slug}`}
-                  />
-                </GridItem>
-              ))}
-            </Grid>
-            {posts?.length > 0 && !resetpagi && (
-              <HStack pt={"32px"} justify={"center"}>
-                <StyledPaginate
-                  className="paginate"
-                  previousLabel="<"
-                  nextLabel=">"
-                  pageCount={len}
-                  onPageChange={handleRouter}
-                  pageRangeDisplayed={1}
-                  marginPagesDisplayed={1}
-                  activeClassName="active"
-                  forcePage={Number(router.query.page) - 1}
+          <SimpleGrid pt={2} columns={{ base: 1, md: 2, lg: 3 }} spacing={"8"}>
+            {posts?.map((post: any, index: number) => (
+              <GridItem key={index}>
+                <CardBlog
+                  title={clean(post?.title?.rendered)}
+                  date={post?.date ? formatDate(post.date) : ""}
+                  desc={clean(post?.excerpt?.rendered)}
+                  tag="Tin tức"
+                  bgTag="red.500"
+                  image={post?.featured_image || ""}
+                  path={`/${post?.slug}`}
                 />
-              </HStack>
-            )}
-          </>
+              </GridItem>
+            ))}
+          </SimpleGrid>
         )}
         {posts?.length === 0 && !isLoading && (
           <>
@@ -150,6 +138,21 @@ export const ListSearchPosts = ({
 
         {isLoading && <Loading />}
       </Box>
+      {posts?.length > 0 && !resetpagi && (
+        <HStack pt={"32px"} justify={"center"}>
+          <StyledPaginate
+            className="paginate"
+            previousLabel="<"
+            nextLabel=">"
+            pageCount={len}
+            onPageChange={handleRouter}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={1}
+            activeClassName="active"
+            forcePage={Number(searchParams.get("page") || 1) - 1}
+          />
+        </HStack>
+      )}
     </>
   );
 };

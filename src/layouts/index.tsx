@@ -1,74 +1,26 @@
-import dynamic from "next/dynamic";
-import { ReactNode, useEffect, useState } from "react";
-import { TrackingSession } from "@/components/TrackingSession";
+"use client";
 
-const BackToTop = dynamic(() =>
-  import("./components/BackToTop").then((mod) => mod.BackToTop)
-);
-const Footer = dynamic(() => import("./footer").then((mod) => mod.Footer));
-const Header = dynamic(() => import("./header").then((mod) => mod.Header));
-const Cta = dynamic(() =>
-  import("@/layouts/components/Cta").then((mod) => mod.Cta)
-);
+import { ReactNode } from "react";
+import { Footer } from "./footer";
+import { Header } from "./header";
+import { CTA } from "./components/Cta";
+import { Box } from "@chakra-ui/react";
+import { TrackingSession } from "@/components/TrackingSession";
 
 interface ILayout {
   children: ReactNode;
 }
 const Layout = ({ children }: ILayout) => {
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [showCTA, setShowCTA] = useState(false);
-  const [page_content, setPageContent] = useState<any>(null);
-
-  useEffect(() => {
-    const getPageContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=header`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setPageContent(data?.posts[0]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPageContent();
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const position = window.scrollY;
-      setScrollPosition(position);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (scrollPosition > 500) {
-      setShowCTA(true);
-    } else {
-      setShowCTA(false);
-    }
-  }, [scrollPosition]);
-  const content = page_content?.acf?.header;
   return (
-    <div style={{ maxWidth: "1920px", margin: "0 auto" }}>
-      <TrackingSession />
-      <Header header={content} />
-      <main>{children}</main>
-      <Footer />
-      {showCTA && (
-        <>
-          <BackToTop />
-          <Cta cta={content?.cta} />
-        </>
-      )}
-    </div>
+    <>
+      <Box maxW={"1920px"} mx={"auto"}>
+        <TrackingSession />
+        <Header />
+        <main>{children}</main>
+        <CTA />
+        <Footer />
+      </Box>
+    </>
   );
 };
 

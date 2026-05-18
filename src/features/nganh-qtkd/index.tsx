@@ -1,47 +1,85 @@
-import dynamic from "next/dynamic";
+"use client";
 
-const Branch = dynamic(() =>
-  import("@/components/Branch").then((mod) => mod.Branch)
-);
-const LayoutNganh = dynamic(() =>
-  import("@/layouts/layoutNganh").then((mod) => mod.LayoutNganh)
-);
+import { Branch } from "@/components/Branch";
+import { LayoutNganh } from "@/layouts/layoutNganh";
+import { useEffect, useState } from "react";
 
-export const Qtkd = ({ data }: any) => {
-  const defaultText1 =
-    "Huân chương Hồ Chí Minh năm 2013.\nHuân chương Lao động hạng Nhất, hạng Nhì, hạng Ba\nHuân chương Lao động hạng Nhất lần thứ 2 năm 2018.\n Huân chương Độc lập hạng Nhất, hạng Nhì, hạng Ba\n Huân chương Tự do ISALA hạng Nhất, hạng Nhì, hạng Ba của nước Cộng hòa DCND Lào.\n Cờ thi đua của Chính phủ và nhiều phần thưởng cao quý khác.";
-  const text1 = data?.sub_title_1 || defaultText1;
-  const defaultText2 =
-    "Đảm nhận các công việc chuyên môn như: Quản trị nguồn nhân lực, Quản trị chiến lược, Quản trị sản xuất và tác nghiệp, Quản trị bán hàng, quản trị chất lượng trong công ty, doanh nghiệp\nĐủ khả năng khởi sự doanh nghiệp của riêng mình\nTrở thành giảng viên, trợ giảng, chuyên gia tư vấn, nghiên cứu viên chuyên môn về lĩnh vực QTKD nói chung và lĩnh vực QTDN nói riêng tại các cơ sở đào tạo, cơ sở nghiên cứu khoa học trên phạm vi cả nước";
-  const text2 = data?.sub_desc_1 || defaultText2;
-  const defaultText3 =
-    "Sau 20 năm thành lập khoa Quản Trị Kinh Doanh, với bề dày kinh nghiệm đào tạo, sinh viên tốt nghiệp ra trường 98% có việc làm và đang nắm giữ vị trí cao trong doanh nghiệp.\n";
-  const text3 = data?.desc || defaultText3;
-  const defaultText4 =
-    "Người học sau khi tốt nghiệp ngành Quản trị kinh doanh, chuyên ngành Quản trị doanh nghiệp tại Đại học từ xa AOF E-Leanring nắm vững kiến thức chuyên sâu về chuyên ngành QTDN, ngành QTKD; am hiểu cấu trúc và cơ chế vận hành của tổ chức và doanh nghiệp; có tư duy sáng tạo và logic; có khả năng nghiên cứu độc lập phân tích, đánh giá và hoạch định các chính sách liên quan đến lĩnh vực Quản trị kinh doanh; có kỹ năng thực hành thành thạo về chuyên môn; có tính kỷ luật và chuyên nghiệp cao; có các kỹ năng cần thiết; có khả năng thích ứng nhanh với môi trường làm việc trong nước và quốc tế.\n";
-  const text4 = data?.desc_1 || defaultText4;
-  const defaultText5 =
-    "Sinh viên tốt nghiệp chuyên ngành Quản trị doanh nghiệp tại AOF E-Learning có cơ hội và có khả năng đảm nhận các công việc chuyên môn được đào tạo về lĩnh vực QTDN và các lĩnh vực khác thuộc ngành QTKD trong các cơ quan Nhà nước; các công ty, tổ chức, tập đoàn trong nước và quốc tế; cụ thể:\n";
-  const text5 = data?.desc_2 || defaultText5;
-  const defaultText6 =
-    "Người đã được công nhận tốt nghiệp trung học phổ thông (THPT), trung cấp, cao đẳng, đại học chính quy của Việt Nam hoặc có bằng tốt nghiệp của nước ngoài được công nhận trình độ tương đương.\n";
-  const text6 = data?.desc_3 || defaultText6;
-  const defaultText7 = "Xét tuyển theo hồ sơ đăng ký (không thi tuyển).\n";
-  const text7 = data?.desc_4 || defaultText7;
+export const Qtkd = ({ initialData }: { initialData?: any }) => {
+  const [page_content, setPageContent] = useState<any>(initialData || null);
+
+  useEffect(() => {
+    if (initialData) return;
+    const getPageContent = async () => {
+      try {
+        const res = await fetch(`/api/content-page/?type=nqtkd`, {
+          next: { revalidate: 300 }
+        });
+        if (!res.ok) {
+          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
+        }
+        const data = await res.json();
+        setPageContent(data?.posts[0]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getPageContent();
+  }, [initialData]);
   return (
     <LayoutNganh
-      title={data?.heading || "Ngành quản trị kinh doanh"}
-      image={data?.image_heading || "/qtkd-a.webp"}
+      title={page_content?.acf?.top?.title || "Ngành quản trị kinh doanh"}
+      path={page_content?.acf?.top?.link || "/nganh-quan-tri-kinh-doanh"}
+      titleNganh={page_content?.acf?.top?.breadcrumb || "Quản trị kinh doanh"}
+      programs={page_content?.acf?.programs}
     >
       <Branch
-        name={data?.title || "Quản trị kinh doanh"}
-        overview={text3.split("\n")}
-        jobs={text1.split("\n")}
-        program={text4.split("\n")}
-        work={text5.split("\n")}
-        workjobs={text2.split("\n")}
-        person={text6.split("\n")}
-        procedure={text7.split("\n")}
+        name={
+          page_content?.acf?.body?.main?.major_info || "Quản trị kinh doanh"
+        }
+        src={page_content?.acf?.body?.main?.image || "/3.png"}
+        overview={[
+          page_content?.acf?.body?.main?.over_view_1 ||
+            "Ngành Quản trị kinh doanh chuẩn bị cho người học những năng lực cần thiết cho việc quản lý các loại hình tổ chức khác nhau, từ các doanh nghiệp cho đến các đơn vị thuộc khu vực công nhằm đạt được mục tiêu với hiệu quả cao nhất. Trong các tổ chức nói trên, người học quản trị kinh doanh có thể đáp ứng yêu cầu của những vị trí quản lý khác nhau: nhân sự, marketing, sản xuất hay điều hành chung tùy theo kinh nghiệm, sở thích và nhu cầu của đơn vị"
+        ]}
+        jobs={[
+          page_content?.acf?.body?.main?.job_1 || "Quản trị kinh doanh quốc tế",
+          page_content?.acf?.body?.main?.job_2 || "Quản trị Marketing",
+          page_content?.acf?.body?.main?.job_3 ||
+            "Quản trị kinh doanh tổng hợp",
+          page_content?.acf?.body?.main?.job_4 || "Quản trị doanh nghiệp",
+          page_content?.acf?.body?.main?.job_5 || "Quản trị Khởi nghiệp",
+          page_content?.acf?.body?.main?.job_6 || "Quản trị Logistic"
+        ]}
+        program={{
+          credits: page_content?.acf?.body?.side_bar?.credits || "124.",
+          subjects: page_content?.acf?.body?.side_bar?.subjects || "42.",
+          list: [
+            {
+              title:
+                page_content?.acf?.body?.side_bar?.list_items?.item_1?.title ||
+                "Đã có bằng cao đẳng khác khối ngành",
+              content:
+                page_content?.acf?.body?.side_bar?.list_items?.item_1
+                  ?.content || "2,5 năm"
+            },
+            {
+              title:
+                page_content?.acf?.body?.side_bar?.list_items?.item_2?.title ||
+                "Đã có bằng cao đẳng cùng khối ngành",
+              content:
+                page_content?.acf?.body?.side_bar?.list_items?.item_1
+                  ?.content || "2 năm"
+            },
+            {
+              title:
+                page_content?.acf?.body?.side_bar?.list_items?.item_3?.title ||
+                "Đã có bằng Đại học cùng, khác khối ngành",
+              content:
+                page_content?.acf?.body?.side_bar?.list_items?.item_1
+                  ?.content || "2 năm"
+            }
+          ]
+        }}
       />
     </LayoutNganh>
   );

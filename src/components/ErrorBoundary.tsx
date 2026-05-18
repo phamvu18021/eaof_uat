@@ -18,7 +18,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   static getDerivedStateFromError(_: Error): ErrorBoundaryState {
-    // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }
 
@@ -37,8 +36,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
 export default ErrorBoundary;
 
-// Define the logErrorToMyService function as per your requirements
 function logErrorToMyService(error: Error, componentStack: string | null) {
-  // Implement your error logging logic here
-  console.log(error);
+  console.error(error);
 }

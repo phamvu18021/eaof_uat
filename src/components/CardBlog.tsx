@@ -1,27 +1,181 @@
 "use client";
 
 import {
-  Avatar,
-  AvatarBadge,
   Box,
-  Center,
+  Button,
   Flex,
+  GridItem,
   Heading,
+  Img,
+  SimpleGrid,
   Stack,
   Text
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { clean } from "@/lib/sanitizeHtml";
 import { useEffect, useState } from "react";
+import { AiOutlineArrowRight, AiTwotoneCalendar } from "react-icons/ai";
+import { FaCircle } from "react-icons/fa";
 
 export const CardBlog = ({
   image,
   title,
   desc,
   path,
-  tag,
-  bgTag,
+  date,
+  imageH,
+  preview,
+  priority
+}: {
+  image?: string;
+  title: string;
+  desc: string;
+  path: string;
+  date?: string;
+  imageH?: string;
+  tag?: string;
+  bgTag?: string;
+  preview?: boolean;
+  priority?: boolean;
+}) => {
+  return (
+    <Box
+      as={Link}
+      style={{ textDecoration: "none" }}
+      href={path}
+      py={4}
+      boxShadow="lg"
+      borderRadius={"7px"}
+    >
+      <Flex
+        flexDir={"column"}
+        justify={"space-between"}
+        bg={"white"}
+        rounded={"sm"}
+        overflow={"hidden"}
+      >
+        <Box>
+          {!preview && (
+            <Box
+              bg={"white"}
+              mx={-6}
+              mb={4}
+              pos={"relative"}
+              aspectRatio={290 / 173}
+              overflow={"hidden"}
+              onMouseEnter={(e) => {
+                const element = e.currentTarget as HTMLElement;
+                const imageElement = element.querySelector(
+                  ".blog-image"
+                ) as HTMLImageElement | null;
+                if (imageElement) {
+                  imageElement.style.transform = "scale(1.05)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                const element = e.currentTarget as HTMLElement;
+                const imageElement = element.querySelector(
+                  ".blog-image"
+                ) as HTMLImageElement | null;
+                if (imageElement) {
+                  imageElement.style.transform = "scale(1.0)";
+                }
+              }}
+            >
+              <Box>
+                <Image
+                  width={450}
+                  height={350}
+                  priority={priority}
+                  fetchPriority={priority ? "high" : "auto"}
+                  quality={75}
+                  sizes="(max-width: 768px) 95vw, (max-width: 1280px) 450px, 400px"
+                  src={image || `/blog.jpeg`}
+                  style={{
+                    maxHeight: imageH,
+                    transition: "0.3s ease-in-out",
+                    width: "100%"
+                  }}
+                  alt={title}
+                  className="blog-image"
+                />
+              </Box>
+            </Box>
+          )}
+          <Stack px={3}>
+            <Box fontSize={"12px"} color={"#1a365d"}>
+              <Flex>
+                {" "}
+                <Flex pr={3} alignItems={"center"}>
+                  {" "}
+                  Admin{" "}
+                  <FaCircle
+                    fontSize="8px"
+                    color="green"
+                    style={{ marginLeft: "4px" }}
+                  />
+                </Flex>{" "}
+                <AiTwotoneCalendar color="#1a365d" fontSize="15px" />{" "}
+                {date?.slice(5)}{" "}
+              </Flex>
+            </Box>
+            <Heading
+              color={"facebook.800"}
+              as={"h3"}
+              fontSize={{ base: "md", lg: "xl" }}
+              fontWeight={"600"}
+              mt={2}
+              _hover={{ color: "#0d6efd" }}
+              css={{
+                display: "-webkit-box",
+                WebkitLineClamp: "2",
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis"
+              }}
+              dangerouslySetInnerHTML={{ __html: title }}
+            />
+
+            <Text
+              color={"gray.500"}
+              fontSize={".8rem"}
+              css={{
+                display: "-webkit-box",
+                WebkitLineClamp: "2",
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis"
+              }}
+              dangerouslySetInnerHTML={{ __html: desc }}
+            />
+          </Stack>
+          <Button
+            variant="link"
+            colorScheme="#030D47"
+            px={0}
+            paddingX={3}
+            fontWeight={600}
+            _hover={{ textDecoration: "none", color: "#6f42c1" }}
+            fontSize={"12px"}
+          >
+            Xem thêm{" "}
+            <AiOutlineArrowRight
+              color="#1a365d"
+              fontSize="12px"
+              style={{ marginLeft: "4px" }}
+            />
+          </Button>
+        </Box>
+      </Flex>
+    </Box>
+  );
+};
+
+export const CardBlogS = ({
+  image,
+  title,
+  desc,
+  path,
   date,
   imageH
 }: {
@@ -34,75 +188,39 @@ export const CardBlog = ({
   date?: string;
   imageH?: string;
 }) => {
-  const [isMounted, setMount] = useState(false);
-
-  useEffect(() => {
-    setMount(true);
-  }, []);
   return (
-    <Center
+    <Box
       as={Link}
       style={{ textDecoration: "none" }}
       href={path}
-      py={6}
-      pos={"relative"}
+      py={4}
+      px={6}
       transition={"all ease .4s"}
       _hover={{ transform: "translateY(-6px)" }}
       className="card-blog"
-      h={"100%"}
     >
-      <Flex
-        flexDir={"column"}
-        justify={"space-between"}
-        maxW={"445px"}
-        w={"full"}
-        bg={"white"}
-        boxShadow={"2xl"}
-        rounded={"md"}
-        p={6}
-        overflow={"hidden"}
-        h={"100%"}
-      >
-        <Box>
-          <Box
-            bg={"gray.100"}
-            mt={-6}
-            mx={-6}
-            mb={6}
-            pos={"relative"}
-            aspectRatio={357 / 238}
-            overflow={"hidden"}
-          >
+      <SimpleGrid columns={2} spacing={4} bg={"white"}>
+        <GridItem colSpan={1}>
+          <Box bg={"gray.100"} overflow={"hidden"}>
             <Image
-              width={600}
-              height={350}
+              width={350}
+              height={450}
+              quality={75}
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 40vw, 300px"
               src={image || `/blog.jpeg`}
               style={{ maxHeight: imageH }}
               alt={title}
             />
           </Box>
+        </GridItem>
+        <GridItem colSpan={1}>
           <Stack>
-            <Box>
-              {tag && (
-                <Text
-                  fontWeight={600}
-                  fontSize={".8rem"}
-                  bg={bgTag || "red.500"}
-                  py={"6px"}
-                  px={"12px"}
-                  color={"white"}
-                  as={"span"}
-                  rounded={"md"}
-                >
-                  {tag}
-                </Text>
-              )}
-            </Box>
             <Heading
               className="event-heading"
-              color={"gray.700"}
-              fontSize={{ base: "sm", lg: "md" }}
+              color={"facebook.700"}
+              fontSize={{ base: "sm", lg: "xl" }}
               fontFamily={"body"}
+              fontWeight={"600"}
               _hover={{ color: "red.400" }}
               css={{
                 display: "-webkit-box",
@@ -111,35 +229,26 @@ export const CardBlog = ({
                 overflow: "hidden",
                 textOverflow: "ellipsis"
               }}
-              dangerouslySetInnerHTML={{ __html: clean(title) }}
+              dangerouslySetInnerHTML={{ __html: title }}
             />
-
-            {isMounted && (
-              <Text
-                color={"gray.500"}
-                fontSize={".8rem"}
-                css={{
-                  display: "-webkit-box",
-                  WebkitLineClamp: "4",
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis"
-                }}
-                dangerouslySetInnerHTML={{ __html: clean(desc) }}
-              />
-            )}
+            <Text fontSize={"md"} pb={1} color={"gray.400"}>
+              {date?.slice(5)}
+            </Text>
+            <Text
+              color={"gray.500"}
+              fontSize={".9rem"}
+              css={{
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis"
+              }}
+              dangerouslySetInnerHTML={{ __html: desc }}
+            />
           </Stack>
-        </Box>
-        <Stack mt={6} direction={"row"} spacing={4} align={"center"}>
-          <Avatar bg={"teal.300"} size={"sm"}>
-            <AvatarBadge boxSize="1.25em" bg="green.500" />
-          </Avatar>
-          <Stack direction={"column"} spacing={0} fontSize={"sm"}>
-            <Text fontWeight={600}>Admin</Text>
-            <Text color={"gray.500"}>{date}</Text>
-          </Stack>
-        </Stack>
-      </Flex>
-    </Center>
+        </GridItem>
+      </SimpleGrid>
+    </Box>
   );
 };
