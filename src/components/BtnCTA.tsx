@@ -102,7 +102,7 @@ export const BtnMes = ({ label, link }: { label: string; link: string }) => {
 
 export const BtnEmail = ({ label }: { label: string }) => {
   return (
-    <Popover placement="left" trigger="hover">
+    <Popover placement="left" trigger="hover" isLazy>
       <PopoverTrigger>
         <HStack
           as="button"
@@ -135,7 +135,7 @@ export const BtnEmail = ({ label }: { label: string }) => {
           Để lại thông tin
         </PopoverHeader>
         <PopoverBody>
-          <FormWrapper type="form-poup" />
+          <FormWrapper />
         </PopoverBody>
       </PopoverContent>
     </Popover>

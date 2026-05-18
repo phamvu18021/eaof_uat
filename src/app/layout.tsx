@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   description:
     "Hệ đào tạo từ xa Đại học Thái Nguyên - Tiết kiệm thời gian và chi phí, bằng cấp được Bộ GD&ĐT công nhận.",
   verification: {
-    google: "c2euFsrK3MT0GbnTAe6V_ikDOZqvLntnf6TD76sGiUI"
-  }
+    google: "c2euFsrK3MT0GbnTAe6V_ikDOZqvLntnf6TD76sGiUI",
+  },
 };
 
 export default function RootLayout({
@@ -35,7 +35,7 @@ export default function RootLayout({
           <Layout>{children}</Layout>
         </Providers>
       </body>
-      <DelayGTM gtmId="GTM-TDCV4KK" />
+      <DelayGTM gtmId="GTM-W57CPPPF" />
     </html>
   );
 }
