@@ -4,7 +4,15 @@ import { Loading } from "@/components/Loading";
 import { clean } from "@/lib/sanitizeHtml";
 import { formatDate } from "@/ultil/date";
 import { toSlug } from "@/ultil/toSlug";
-import { Box, Center, GridItem, HStack, SimpleGrid } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  GridItem,
+  HStack,
+  SimpleGrid,
+  Skeleton,
+  Stack
+} from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -138,7 +146,19 @@ export const ListSearchPosts = ({
           </>
         )}
 
-        {isLoading && <Loading />}
+        {isLoading && (
+          <SimpleGrid pt={2} columns={{ base: 1, md: 2, lg: 3 }} spacing={"8"}>
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <GridItem key={i}>
+                <Box w="100%">
+                  <Skeleton h="260px" borderRadius="md" mb={3} />
+                  <Skeleton h="20px" w="90%" mb={2} />
+                  <Skeleton h="16px" w="40%" />
+                </Box>
+              </GridItem>
+            ))}
+          </SimpleGrid>
+        )}
       </Box>
       {posts?.length > 0 && !resetpagi && (
         <HStack pt={"32px"} justify={"center"}>

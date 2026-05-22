@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   JumpingElement,
@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { FaBook } from "react-icons/fa";
 import { useEffect, useState } from "react";
 const MotionBox = motion(Box);
@@ -320,18 +321,23 @@ export const Banners = ({ banners }: BannersComponentProps) => {
                 </List>
               </MotionBox>
               <Box
+                position="relative"
                 h={{ base: "250px", md: "525px" }}
                 w="100%"
                 maxW="60%"
-                bgImage={`url(${banners?.list_3?.image || "/b.jpg"})`}
-                bgPosition="center"
-                bgSize="cover"
                 borderRadius="md"
                 zIndex="1"
-                sx={{
-                  backgroundImageRendering: "optimizeQuality"
-                }}
-              />
+                overflow="hidden"
+              >
+                <Image
+                  src={banners?.list_3?.image || "/b.jpg"}
+                  alt="Tuyển sinh đại học từ xa"
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: "cover" }}
+                />
+              </Box>
               <JumpingElement delay={0.3}>
                 <Box
                   position="absolute"

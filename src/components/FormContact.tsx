@@ -1,8 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { Loading } from "./Loading";
-import { Text } from "@chakra-ui/react";
+import { Text, Skeleton, Box } from "@chakra-ui/react";
 const comonForm = ({
   uuid,
   url,
@@ -161,7 +161,11 @@ export const FormMain = ({
         </Text>
       )}
 
-      {isLoading && <Loading />}
+      {isLoading && (
+        <Skeleton height="38vh" borderRadius="md" w="100%">
+          <Box height="38vh" />
+        </Skeleton>
+      )}
       {!isLoading && (
         <div id={embed.divId} title="form-main" className={embed.divClass} />
       )}

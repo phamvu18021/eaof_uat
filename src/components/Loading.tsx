@@ -1,15 +1,16 @@
 "use client";
 
-import { Center, Spinner, SpinnerProps } from "@chakra-ui/react";
+import { Skeleton, Box } from "@chakra-ui/react";
 
-interface ILoading extends SpinnerProps {
+interface ILoading {
   he?: string;
 }
 
 export const Loading = (props: ILoading) => {
+  const height = props?.he || "150px";
   return (
-    <Center minH={props?.he || "10vh"}>
-      <Spinner color="red.500" size={"md"} {...props} />
-    </Center>
+    <Skeleton height={height} borderRadius="md" w="100%">
+      <Box height={height} />
+    </Skeleton>
   );
 };

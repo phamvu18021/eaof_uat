@@ -15,6 +15,7 @@ import {
   Heading,
   Input,
   SimpleGrid,
+  Skeleton,
   Stack,
   Text
 } from "@chakra-ui/react";
@@ -216,7 +217,17 @@ export const Sidebar = ({
                   </Stack>
                 )}
 
-                {isLoading && <Loading />}
+                {isLoading && (
+                  <Stack spacing={6} w="100%" p={4}>
+                    {[1, 2, 3].map((i) => (
+                      <Box key={i} w="100%">
+                        <Skeleton h="200px" borderRadius="md" mb={2} />
+                        <Skeleton h="18px" w="90%" mb={2} />
+                        <Skeleton h="14px" w="40%" />
+                      </Box>
+                    ))}
+                  </Stack>
+                )}
               </Box>
             </Box>
             <Box pt={"24px"}>
@@ -282,7 +293,17 @@ export const Sidebar = ({
                     </>
                   </Stack>
                 )}
-                {isLoading && <Loading />}
+                {isLoading && (
+                  <Stack spacing={6} w="100%" p={4}>
+                    {[1, 2, 3].map((i) => (
+                      <Box key={i} w="100%">
+                        <Skeleton h="200px" borderRadius="md" mb={2} />
+                        <Skeleton h="18px" w="90%" mb={2} />
+                        <Skeleton h="14px" w="40%" />
+                      </Box>
+                    ))}
+                  </Stack>
+                )}
               </Box>
             </Box>
           </>

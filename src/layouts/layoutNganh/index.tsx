@@ -12,6 +12,7 @@ import { keyframes } from "@emotion/react";
 import { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { FormWrapper } from "@/components/FormWrapper";
 
 const flipFromTop = keyframes`
@@ -45,21 +46,31 @@ export const LayoutNganh = ({
         position="relative"
         p={{ lg: "64px 0", md: "64px 0", base: "32px 0" }}
       >
-        <Box
-          pos="absolute"
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          bgImage={backgroundImage}
-          zIndex={-1}
-          filter="auto"
-          brightness="45%"
-          bgSize="cover"
-          bgRepeat={"no-repeat"}
-          bgPosition={"0 100%"}
-          height={"350px"}
-        ></Box>
+        {backgroundImage && (
+          <Box
+            pos="absolute"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            zIndex={-1}
+            height={"350px"}
+            overflow="hidden"
+          >
+            <Image
+              src={backgroundImage}
+              alt={title || "Background Banner"}
+              fill
+              priority
+              sizes="100vw"
+              style={{
+                objectFit: "cover",
+                objectPosition: "0 100%",
+                filter: "brightness(45%)"
+              }}
+            />
+          </Box>
+        )}
         <Container maxW={"6xl"} py={"90px"}>
           <Flex justifyContent="center">
             <Heading

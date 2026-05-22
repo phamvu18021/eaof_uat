@@ -3,7 +3,14 @@
 import { Loading } from "@/components/Loading";
 import { clean } from "@/lib/sanitizeHtml";
 import { formatDate } from "@/ultil/date";
-import { Box, Grid, GridItem, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  Heading,
+  Skeleton,
+  Stack
+} from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -115,7 +122,35 @@ export const ListPosts = ({
           </Grid>
         )}
 
-        {isLoading && <Loading />}
+        {isLoading && (
+          <Grid templateColumns="repeat(1, 1fr)" gap="10">
+            {[1, 2, 3, 4].map((i) => (
+              <Box
+                key={i}
+                display="flex"
+                flexDirection={{ base: "column", sm: "row" }}
+                justifyContent="space-between"
+                gap="6"
+              >
+                <Box display="flex" flex="1" position="relative">
+                  <Box width={{ base: "100%", sm: "75%" }}>
+                    <Skeleton h="200px" borderRadius="md" />
+                  </Box>
+                </Box>
+                <Box
+                  mt={{ lg: "0", base: "20px" }}
+                  display="flex"
+                  flex="1"
+                  flexDirection="column"
+                  justifyContent="center"
+                >
+                  <Skeleton h="22px" w="90%" mb={3} />
+                  <Skeleton h="16px" w="40%" />
+                </Box>
+              </Box>
+            ))}
+          </Grid>
+        )}
       </Box>
     </>
   );

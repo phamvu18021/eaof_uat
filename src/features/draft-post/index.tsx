@@ -10,6 +10,8 @@ import {
   Container,
   GridItem,
   SimpleGrid,
+  Skeleton,
+  Stack,
   Text
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -45,7 +47,30 @@ export const DraftPosts = () => {
     getPosts();
   }, []);
 
-  if (isLoading) return <Loading he="50vh" />;
+  if (isLoading) {
+    return (
+      <Box>
+        <Container maxW={"6xl"} py={{ base: "32px", md: "48px" }}>
+          <Skeleton h="40px" w="300px" mb={6} />
+          <Skeleton h="20px" w="200px" mb={12} />
+          <SimpleGrid
+            columns={{ base: 1, md: 2, lg: 3 }}
+            spacing={{ base: "16px", md: "24px" }}
+          >
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <GridItem key={i}>
+                <Box w="100%">
+                  <Skeleton h="260px" borderRadius="md" mb={3} />
+                  <Skeleton h="20px" w="90%" mb={2} />
+                  <Skeleton h="16px" w="40%" />
+                </Box>
+              </GridItem>
+            ))}
+          </SimpleGrid>
+        </Container>
+      </Box>
+    );
+  }
 
   if (posts?.length === 0)
     return (
