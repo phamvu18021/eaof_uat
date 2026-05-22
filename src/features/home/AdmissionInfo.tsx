@@ -21,11 +21,11 @@ export const AdmissionInfo = (item_6: any) => {
       title: item_6?.item_6?.list?.list_1?.title || "1. ĐỐI TƯỢNG TUYỂN SINH",
       items: [
         item_6?.item_6?.list?.list_1?.label_1 ||
-        "Đối tượng có bằng THPT trở lên",
+          "Đối tượng có bằng THPT trở lên",
         item_6?.item_6?.list?.list_1?.label_2 ||
-        "Cán bộ, công chức, người đang làm việc tại các cơ quan, tổ chức, doanh nghiệp nhà nước, tư nhân, ...",
+          "Cán bộ, công chức, người đang làm việc tại các cơ quan, tổ chức, doanh nghiệp nhà nước, tư nhân, ...",
         item_6?.item_6?.list?.list_1?.label_3 ||
-        "Những người đã có bằng CĐ/ĐH muốn học thêm VB thứ 2."
+          "Những người đã có bằng CĐ/ĐH muốn học thêm VB thứ 2."
       ]
     },
     {
@@ -34,9 +34,9 @@ export const AdmissionInfo = (item_6: any) => {
         "2. THỜI GIAN VÀ THỦ TỤC ĐĂNG KÝ",
       items: [
         item_6?.item_6?.list?.list_2?.label_1 ||
-        "Thời gian học: Căn cứ vào hồ sơ, văn bằng của sinh viên nộp trong hồ sơ xét tuyển",
+          "Thời gian học: Căn cứ vào hồ sơ, văn bằng của sinh viên nộp trong hồ sơ xét tuyển",
         item_6?.item_6?.list?.list_2?.label_2 ||
-        "Cách đăng ký: Học viên vui lòng liên hệ theo hotline hoặc đăng ký theo form để được hỗ trợ tư vấn chi tiết"
+          "Cách đăng ký: Học viên vui lòng liên hệ theo hotline hoặc đăng ký theo form để được hỗ trợ tư vấn chi tiết"
       ]
     }
   ];

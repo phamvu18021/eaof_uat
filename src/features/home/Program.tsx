@@ -78,7 +78,7 @@ export const Program = (chuong_trinhs: any) => {
               dangerouslySetInnerHTML={{
                 __html: clean(
                   chuong_trinhs?.chuong_trinhs?.chuong_trinh?.text_1 ||
-                  "Trường đại học Mở Hà Nội là cơ sở giáo dục đại học công lập hoạt động trong hệ thống các trường đại học quốc dân do Bộ Giáo dục và Đào tạo trực tiếp quản lý, là cơ sở đào tạo đại học và nghiên cứu với các loại hình đào tạo từ xa, đào tạo tại chỗ nhằm đáp ứng nhu cầu học tập đa dạng của xã hội, góp phần tăng tiềm lực cán bộ khoa học - kỹ thuật cho đất nước. Trích Quyết định 535-TTg của Thủ tướng Chính phủ."
+                    "Trường đại học Mở Hà Nội là cơ sở giáo dục đại học công lập hoạt động trong hệ thống các trường đại học quốc dân do Bộ Giáo dục và Đào tạo trực tiếp quản lý, là cơ sở đào tạo đại học và nghiên cứu với các loại hình đào tạo từ xa, đào tạo tại chỗ nhằm đáp ứng nhu cầu học tập đa dạng của xã hội, góp phần tăng tiềm lực cán bộ khoa học - kỹ thuật cho đất nước. Trích Quyết định 535-TTg của Thủ tướng Chính phủ."
                 )
               }}
             />
