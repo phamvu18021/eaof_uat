@@ -1,30 +1,26 @@
-import { NextResponse } from "next/server";
 import { fetchAuth } from "@/ultil/fetchAuth";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
   const catId = searchParams.get("catId") || "";
   const id = searchParams.get("id") || "";
-  const api_url = process.env.API_URL || "";
+  const api_url = process.env.API_URL_TSEH || "";
 
   let samePosts: any[] = [];
-
   if (catId) {
     try {
       const resRelatedPosts = await fetchAuth({
         url: `${api_url}/posts/?categories=${catId}&exclude=${id}&per_page=3&_embed`,
-        revalidate: 300
+        revalidate: 1
       });
-
       if (!resRelatedPosts.ok) {
-        return NextResponse.json(
-          { error: "Fetch failed" },
-          { status: resRelatedPosts.status }
+        throw new Error(
+          `Posts fetch failed with status: ${resRelatedPosts.statusText}`
         );
       }
-
       const relatedPosts: any[] = await resRelatedPosts.json();
-      samePosts =
+      const postsWithFeaturedImages =
         relatedPosts?.length > 0
           ? relatedPosts?.map((post: any) => {
               const featured_image =
@@ -36,6 +32,8 @@ export async function GET(request: Request) {
               };
             })
           : [];
+
+      samePosts = postsWithFeaturedImages;
     } catch (error) {
       console.error(error);
     }

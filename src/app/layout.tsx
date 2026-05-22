@@ -1,25 +1,22 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "@/styles/globals.css";
 import "@/styles/tableContent.css";
 import { Providers } from "./providers";
 import Layout from "@/layouts";
 import Script from "next/script";
 
-const montserrat = Montserrat({
-  weight: ["400", "500", "700"],
+const roboto = Roboto({
+  weight: ["100", "300", "400", "500", "700", "900"],
   subsets: ["latin", "vietnamese"],
   display: "swap",
-  variable: "--font-montserrat"
+  variable: "--font-roboto"
 });
 
 export const metadata: Metadata = {
-  title: "Đại học Thái Nguyên - Hệ đào tạo từ xa",
+  title: "Trường Đại học Mở Hà Nội - Tuyển sinh từ xa",
   description:
-    "Hệ đào tạo từ xa Đại học Thái Nguyên - Tiết kiệm thời gian và chi phí, bằng cấp được Bộ GD&ĐT công nhận.",
-  verification: {
-    google: "c2euFsrK3MT0GbnTAe6V_ikDOZqvLntnf6TD76sGiUI",
-  },
+    "Trang tuyển sinh chính thức Trường Đại học Mở Hà Nội. Đào tạo từ xa chất lượng cao, tiết kiệm thời gian và chi phí, bằng cấp được Bộ GD&ĐT công nhận."
 };
 
 export default function RootLayout({
@@ -28,12 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi">
-      <body className={montserrat.className}>
+    <html lang="vi" suppressHydrationWarning>
+      <body className={roboto.className}>
         <noscript>
           <iframe
             title="Google Tag Manager"
-            src="https://www.googletagmanager.com/ns.html?id=GTM-W57CPPPF"
+            src="https://www.googletagmanager.com/ns.html?id=GTM-P45V2GW"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
@@ -46,7 +43,7 @@ export default function RootLayout({
               var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
               j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
               f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-W57CPPPF');
+            })(window,document,'script','dataLayer','GTM-P45V2GW');
           `}
         </Script>
         <Providers>

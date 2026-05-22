@@ -1,31 +1,17 @@
-import { Loading } from "@/components/Loading";
-import dynamic from "next/dynamic";
+import { Tmdt } from "@/features/nganh-tmdt";
 import { Metadata } from "next";
 import { getGlobalMetadata } from "@/lib/seo-helper";
 
-const Tmdt = dynamic<any>(() =>
-  import("@/features/nganh-tmdt").then((mod) => mod.Tmdt)
-);
-
-async function getPageData() {
-  const domain = process.env.NEXT_PUBLIC_DOMAIN || "https://etnu.edu.vn";
-  const res = await fetch(`${domain}/api/content-page/?type=ntmdtvmkts`, {
-    next: { revalidate: 300 }
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data?.posts?.[0] || null;
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   return getGlobalMetadata("nganh-thuong-mai-dien-tu", {
-    title: "Ngành thương mại điện tử - Đại học Thái Nguyên",
+    title: "Ngành Thương mại điện tử - Trường Đại học Mở Hà Nội",
     description:
-      "Ngành thương mại điện tử - Đại học Thái Nguyên, thông tin ngành thương mại điện tử Đại học Thái nguyên"
+      "Ngành Thương mại điện tử hệ đại học từ xa Trường Đại học Mở Hà Nội. Bằng cấp được Bộ GD&ĐT công nhận."
   });
 }
 
-export default async function Page() {
-  const data = await getPageData();
-  return <Tmdt initialData={data} />;
+export default function Page() {
+  return <Tmdt />;
 }

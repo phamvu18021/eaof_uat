@@ -31,7 +31,7 @@ export const FormContact = ({
         <Stack spacing={4} direction={{ base: "column", md: "row" }} w={"full"}>
           <Input
             type={"text"}
-            placeholder={"AUM@gmail.com"}
+            placeholder={"neu@gvcn.vn"}
             color={"gray.800"}
             fontSize={"sm"}
           />

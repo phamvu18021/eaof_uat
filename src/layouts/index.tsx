@@ -3,13 +3,13 @@
 import { ReactNode } from "react";
 import { Footer } from "./footer";
 import { Header } from "./header";
-import { CTA } from "./components/Cta";
 import { Box } from "@chakra-ui/react";
 import { TrackingSession } from "@/components/TrackingSession";
 
 interface ILayout {
   children: ReactNode;
 }
+
 const Layout = ({ children }: ILayout) => {
   return (
     <>
@@ -17,7 +17,6 @@ const Layout = ({ children }: ILayout) => {
         <TrackingSession />
         <Header />
         <main>{children}</main>
-        <CTA />
         <Footer />
       </Box>
     </>

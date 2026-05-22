@@ -1,9 +1,9 @@
 "use client";
 
 import {
-  HStack,
   Heading,
   IconButton,
+  IconButtonProps,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -11,131 +11,92 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Text,
   Tooltip
 } from "@chakra-ui/react";
 import { BiPhone } from "react-icons/bi";
 import { BsMessenger } from "react-icons/bs";
-import { MdEmail, MdOutlineMail } from "react-icons/md";
+import { MdEmail } from "react-icons/md";
 import { SiZalo } from "react-icons/si";
 import { FormWrapper } from "./FormWrapper";
 
-export const BtnPhone = ({ label, link }: { label: string; link: string }) => {
+export const BtnPhone = (props: IconButtonProps) => {
   return (
-    <Tooltip label={label} placement="left" bg={"red.500"} hasArrow>
+    <Tooltip label={"0941.010.044"} placement="left" bg={"red.500"} hasArrow>
       <IconButton
         icon={<BiPhone />}
-        size="lg"
-        borderRadius={"50% 0  0 50%"}
+        rounded={"full"}
         color={"white"}
-        bg={"red.600"}
+        bg={"red.500"}
         p={"8px"}
         as={"a"}
-        href={`tel: ${link}`}
-        aria-label={"Phone"}
+        href={"tel: 0914709118"}
+        {...props}
       />
     </Tooltip>
   );
 };
 
-export const BtnZalo = ({ label, link }: { label: string; link: string }) => {
+export const BtnZalo = (props: IconButtonProps) => {
   return (
-    <Tooltip label={label} placement="left" bg={"blue.500"} hasArrow>
+    <Tooltip label={"Zalo chat"} placement="left" bg={"blue.500"} hasArrow>
       <IconButton
         icon={<SiZalo />}
-        size="lg"
-        borderRadius={"50% 0  0 50%"}
+        rounded={"full"}
         color={"white"}
         bg={"blue.500"}
         p={"8px"}
         as={"a"}
-        href={link}
-        target="blank"
-        aria-label={"Zalo chat"}
+        href={"https://zalo.me/0914709118"}
+        {...props}
       />
     </Tooltip>
   );
 };
 
-export const BtnMailN = ({ label, link }: { label: string; link: string }) => {
-  return (
-    <Tooltip label={label} placement="left" bg={"blue.500"} hasArrow>
-      <IconButton
-        icon={<MdOutlineMail />}
-        size="lg"
-        borderRadius={"50% 0  0 50%"}
-        color={"white"}
-        bg={"blue.500"}
-        p={"8px"}
-        as={"a"}
-        href={`mailto: ${link}`}
-        aria-label={"Send email"}
-      />
-    </Tooltip>
-  );
-};
-export const BtnMes = ({ label, link }: { label: string; link: string }) => {
+export const BtnMes = (props: IconButtonProps) => {
   return (
     <Tooltip
-      transition={"all 0.2s"}
-      label={label}
+      label={"Facebook messenger"}
       placement="left"
       bg={"blue.500"}
       hasArrow
     >
       <IconButton
         icon={<BsMessenger />}
-        size="lg"
-        borderRadius={"50% 0  0 50%"}
+        rounded={"full"}
         color={"white"}
-        bg={"green.500"}
+        bg={"blue.500"}
         p={"8px"}
         transition={"width ease .4s"}
         as={"a"}
-        href={link}
-        target="blank"
-        aria-label={"Facebook messenger"}
+        href={" https://www.facebook.com/cunhantructuyenhvtc/"}
+        {...props}
       />
     </Tooltip>
   );
 };
 
-export const BtnEmail = ({ label }: { label: string }) => {
+export const BtnEmail = (props: IconButtonProps) => {
   return (
-    <Popover placement="left" trigger="hover" isLazy>
+    <Popover placement="left" trigger="hover">
       <PopoverTrigger>
-        <HStack
-          as="button"
-          role="button"
-          aria-label="Để lại thông tin tư vấn"
-          spacing={0}
-          borderRadius={0}
+        <IconButton
+          icon={<MdEmail />}
+          rounded={"full"}
+          color={"white"}
           bg={"orange.500"}
-          transform={"rotate(270deg)"}
-        >
-          <IconButton
-            icon={<MdEmail />}
-            size="lg"
-            // rounded={""
-            _hover={{}}
-            color={"white"}
-            bg={"orange.500"}
-            p={"8px"}
-            aria-label={"form"}
-          />
-          <Text pr={2} color={"white"}>
-            {label}
-          </Text>
-        </HStack>
+          p={"8px"}
+          {...props}
+        />
       </PopoverTrigger>
-      <PopoverContent aria-label="Để lại thông tin">
+      <PopoverContent>
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverHeader as={Heading} size={"md"} textAlign={"center"}>
           Để lại thông tin
         </PopoverHeader>
         <PopoverBody>
-          <FormWrapper />
+          <FormWrapper type="form-poup" />
         </PopoverBody>
       </PopoverContent>
     </Popover>

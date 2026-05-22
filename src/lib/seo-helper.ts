@@ -7,7 +7,7 @@ export async function getGlobalMetadata(
   slug?: string,
   fallback: Metadata = {}
 ): Promise<Metadata> {
-  const baseUrl = process.env.API_RMS_URL || "";
+  const baseUrl = process.env.API_RMS_URL_TSEH || "";
   if (!baseUrl) return fallback;
 
   const url = slug ? `${baseUrl}/${slug}/` : baseUrl;
@@ -24,7 +24,6 @@ export async function getGlobalMetadata(
 
     const parsed = parseMetadata(replaceSeoRM(head));
 
-    // Merge parsed metadata with fallback, preferring parsed values if they exist
     return {
       ...fallback,
       title: parsed.title || fallback.title || undefined,

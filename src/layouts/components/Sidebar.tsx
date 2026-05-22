@@ -1,15 +1,8 @@
 "use client";
 
 import { CardBlogVert } from "@/components/CardBlogVert";
+import { FormWrapper } from "@/components/FormWrapper";
 import { Loading } from "@/components/Loading";
-import dynamic from "next/dynamic";
-
-const FormWrapper = dynamic(() =>
-  import("@/components/FormWrapper").then((m) => m.FormWrapper)
-);
-const ScrollView = dynamic(() =>
-  import("@/components/ScrollView").then((m) => m.ScrollView)
-);
 import { clean } from "@/lib/sanitizeHtml";
 import { formatDate } from "@/ultil/date";
 import { toSlug } from "@/ultil/toSlug";
@@ -95,17 +88,20 @@ export const Sidebar = ({
   };
 
   useEffect(() => {
-    const getPosts = async () => {
-      // Guard: Don't fetch sidebar data on mobile since Sidebar is hidden
-      if (window.innerWidth < 1024) {
-        setIsLoading(false);
-        return;
-      }
+    const str = toSlug({ input: searchQuery });
+    if (searchQuery != "" && str == "") {
+      setCheckInput(true);
+    } else {
+      setCheckInput(false);
+    }
+  }, [searchQuery]);
 
+  useEffect(() => {
+    const getPosts = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`/api/posts/?type=notifis&page=1`, {
-          next: { revalidate: 300 }
+        const res = await fetch(`/api/posts/?type=news&page=1`, {
+          next: { revalidate: 3 }
         });
         if (!res.ok) {
           throw new Error(`Posts fetch failed with status: ${res.statusText}`);
@@ -130,7 +126,7 @@ export const Sidebar = ({
         top={sticky}
         display={{ lg: "block", base: "none" }}
       >
-        <Box pt={4}>
+        <Box pt={4} px={6}>
           <form onSubmit={onSearch}>
             <HStack columnGap={"0"}>
               <Input
@@ -139,6 +135,7 @@ export const Sidebar = ({
                 type="Text"
                 border={"1px solid #BFBFBF "}
                 borderRadius={0}
+                px={4}
                 placeholder="Tìm kiếm..."
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -148,7 +145,7 @@ export const Sidebar = ({
                 bg={"blue.800"}
                 color={"white"}
                 _hover={{
-                  bg: "blue.600"
+                  bg: "red.600"
                 }}
               >
                 Tìm kiếm
@@ -166,7 +163,17 @@ export const Sidebar = ({
             </Box>
           )}
         </Box>
-
+        <Box px={6} pt={"32px"}>
+          <Heading
+            as={"h3"}
+            size={"sm"}
+            pb={"20px"}
+            textAlign={{ base: "center", lg: "center" }}
+          >
+            ĐĂNG KÝ NGAY ĐỂ NHẬN TƯ VẤN
+          </Heading>
+          <FormWrapper type="form-main" />
+        </Box>
         {typez && (
           <>
             <Box mt={2} justifyContent={"flex-start"}>
@@ -175,11 +182,11 @@ export const Sidebar = ({
                 py={2}
                 w={"-webkit-fit-content"}
                 height={8}
-                bg={"blue.900"}
+                bg={"#1a4c94"}
                 color={"white"}
                 textAlign={"start"}
               >
-                Thông báo ETNU
+                Bài viết mới
               </Text>
               <Box borderBottom={"1px solid #030d47 "}></Box>
               <Box>
@@ -192,10 +199,11 @@ export const Sidebar = ({
                             date={post?.date ? formatDate(post.date) : ""}
                             key={index}
                             title={post?.title?.rendered}
-                            tag="Thông báo"
+                            // tag="Thông báo"
                             desc={clean(post.excerpt.rendered)}
                             image={post?.featured_image || ""}
-                            path={`/${post?.slug}`}
+                            path={`/vi/${post?.slug}`}
+                            tag={""}
                           />
                         ))}
                       </SimpleGrid>
@@ -213,48 +221,32 @@ export const Sidebar = ({
             </Box>
             <Box pt={"24px"}>
               <Heading
-                as={"h3"}
+                as={"h2"}
                 size={"sm"}
                 pb={"20px"}
                 textAlign={{ base: "center", lg: "center" }}
               >
                 ĐĂNG KÝ NGAY ĐỂ NHẬN TƯ VẤN
               </Heading>
-              <ScrollView>
-                <FormWrapper type="form-main" />
-              </ScrollView>
+              <FormWrapper type="form-main" />
             </Box>
           </>
         )}
 
         {!typez && (
           <>
-            <Box pt={"24px"}>
-              <Heading
-                as={"h3"}
-                size={"sm"}
-                pb={"20px"}
-                textAlign={{ base: "center", lg: "center" }}
-              >
-                ĐĂNG KÝ NGAY ĐỂ NHẬN TƯ VẤN
-              </Heading>
-              <div key={"f1"}>
-                <ScrollView>
-                  <FormWrapper type="form-main" />
-                </ScrollView>
-              </div>
-            </Box>
-            <Box justifyContent={"flex-start"}>
+            <Box justifyContent={"flex-start"} pt={"22px"} ml={"7px"}>
               <Text
                 px={2}
                 py={2}
                 w={"-webkit-fit-content"}
                 height={8}
-                bg={"blue.900"}
+                bg={"#1a4c94"}
                 color={"white"}
                 textAlign={"start"}
+                fontSize={"14px"}
               >
-                Thông báo ETNU
+                Bài viết mới
               </Text>
               <Box borderBottom={"1px solid #030d47 "}></Box>
               <Box className="ttcol">
@@ -265,16 +257,20 @@ export const Sidebar = ({
                     justifyContent={{ base: "center", md: "flex-start" }}
                   >
                     <>
-                      <SimpleGrid columns={{ base: 1, md: 1, lg: 1 }}>
+                      <SimpleGrid
+                        columns={{ base: 1, md: 1, lg: 1 }}
+                        spacing={5}
+                        p={4}
+                      >
                         {posts?.slice(0, 3).map((post: any, index: number) => (
                           <CardBlogVert
                             date={post?.date ? formatDate(post.date) : ""}
                             key={index}
                             title={post?.title?.rendered}
-                            tag="Thông báo"
                             desc={clean(post.excerpt.rendered)}
                             image={post?.featured_image || ""}
-                            path={`/${post?.slug}`}
+                            path={`/vi/${post?.slug}`}
+                            tag={""}
                           />
                         ))}
                       </SimpleGrid>
@@ -286,7 +282,6 @@ export const Sidebar = ({
                     </>
                   </Stack>
                 )}
-
                 {isLoading && <Loading />}
               </Box>
             </Box>

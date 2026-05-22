@@ -4,18 +4,14 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": [
-      "off",
+      "error",
       {
         "singleQuote": false,
         "semi": true,
         "endOfLine": "lf"
       }
     ],
-    "no-console": [
-      "off",
-      {
-        "allow": ["warn", "error"]
-      }
-    ]
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-unused-vars": "off"
   }
 }

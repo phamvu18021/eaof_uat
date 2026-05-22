@@ -5,7 +5,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "etnu.aum.edu.vn",
+        hostname: "admin.tuyensinh-ehou.vn",
         pathname: "/wp-content/uploads/**"
       }
     ],
@@ -22,12 +22,9 @@ const nextConfig = {
       "react-icons",
       "framer-motion",
       "swiper",
-      "lucide-react",
-      "@heroicons/react",
       "@chakra-ui/react"
     ]
   },
-
   compiler: {
     removeConsole:
       process.env.NODE_ENV === "production"

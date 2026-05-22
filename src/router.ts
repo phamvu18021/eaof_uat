@@ -6,6 +6,7 @@ export type TMenus = {
     title: string;
   }[];
 }[];
+
 export const menus = [
   {
     path: "/", // the url
@@ -21,57 +22,94 @@ export const menus = [
     title: "Ngành học",
     childs: [
       {
+        path: "/nganh-ngon-ngu-anh",
+        title: "Ngôn Ngữ Anh"
+      },
+
+      {
         path: "/nganh-cong-nghe-thong-tin",
-        title: "Công nghệ thông tin"
-      },
-      {
-        path: "/nganh-dien-tu-vien-thong",
-        title: "Điện tử viễn thông"
-      },
-      {
-        path: "/nganh-quan-tri-kinh-doanh",
-        title: "Quản trị kinh doanh"
-      },
-      {
-        path: "/nganh-luat-kinh-te",
-        title: "Luật kinh tế"
-      },
-      {
-        path: "/nganh-thuong-mai-dien-tu",
-        title: "Thương mại điện tử và Marketing số"
-      },
-      // {
-      //   path: "/nganh-ngon-ngu-anh",
-      //   title: "Ngôn ngữ Anh"
-      // },
-      {
-        path: "/nganh-ngon-ngu-trung",
-        title: "Ngôn ngữ Trung"
-      },
-      {
-        path: "/nganh-ke-toan",
-        title: "Kế toán"
-      },
-      {
-        path: "/nganh-tai-chinh-ngan-hang",
-        title: "Tài chính ngân hàng"
+        title: "Công Nghệ Thông Tin"
       },
       {
         path: "/nganh-luat",
         title: "Luật"
+      },
+      {
+        path: "/nganh-luat-kinh-te",
+        title: "Luật Kinh Tế"
+      },
+      {
+        path: "/nganh-quan-tri-kinh-doanh",
+        title: "Quản Trị Kinh Doanh"
+      },
+      {
+        path: "/nganh-ke-toan",
+        title: "Kế Toán"
+      },
+      {
+        path: "/nganh-tai-chinh-ngan-hang",
+        title: "Tài Chính Ngân Hàng "
+      },
+      {
+        path: "/nganh-thuong-mai-dien-tu",
+        title: "Thương Mại Điện Tử "
+      },
+      {
+        path: "/nganh-quan-tri-khach-san",
+        title: "Quản Trị Khách Sạn "
+      },
+      {
+        path: "/nganh-quan-tri-dich-vu-du-lich-lu-hanh",
+        title: "Quản Trị Dịch Vụ Du Lịch và Lữ Hành "
+      },
+      {
+        path: "/nganh-ngon-ngu-trung",
+        title: "Ngôn Ngữ Trung Quốc"
       }
     ]
   },
+  // {
+  //   path: "/kiem-dinh-chat-luong", // the url
+  //   title: "Kiểm định chất lượng"
+  // },
+  // {
+  //   path: "/hoc-thu", // the url
+  //   title: "Học thử"
+  // },
+  // {
+  //   path: "/tin-tuc", // the url
+  //   title: "Tin tức",
+  //   childs: [
+  //     {
+  //       path: "/tin-tuyen-sinh",
+  //       title: "Tin tuyển sinh"
+  //     },
+
+  //     {
+  //       path: "/tu-van-chon-nganh",
+  //       title: "Tư vấn chọn ngành"
+  //     },
+  //     {
+  //       path: "/tu-van-huong-nghiep",
+  //       title: "Tư vấn hướng nghiệp"
+  //     },
+
+  //     {
+  //       path: "/su-kien",
+  //       title: "Sự kiện"
+  //     },
+  //     {
+  //       path: "/thong-bao",
+  //       title: "Thông báo"
+  //     }
+  //   ]
+  // },
   {
-    path: "/lich-khai-giang", // the url
-    title: "Lịch khai giảng"
-  },
-  {
-    path: "/dang-ky", // the url
-    title: "Đăng ký"
-  },
-  {
-    path: "/tin-tuc", // the url
-    title: "Tin tức và Sự Kiện" // view rendered
+    path: "/lien-he", // the url
+    title: "Liên hệ "
   }
+  // {
+  //   path: "/lich-khai-giang", // the url
+  //   title: "Khai giảng"
+  // }
 ];

@@ -1,102 +1,137 @@
+"use client";
+
 import { menus } from "@/router";
 import {
   Box,
+  Flex,
+  Icon,
   Popover,
   PopoverContent,
   PopoverTrigger,
   Stack,
-  Text,
-  useDisclosure
+  Text
 } from "@chakra-ui/react";
-
-import { FormPoup } from "@/components/FormContact";
-import { ModalBase } from "@/components/Modal";
 import Link from "next/link";
+import React from "react";
+import { BsChevronRight } from "react-icons/bs";
+import { usePathname } from "next/navigation";
+
 interface INavItem {
   title: string;
   children?: Array<INavItem>;
   path?: string;
 }
-
 export const DesktopNav = () => {
-  const linkColor = "gray.700";
-  const linkHoverColor = "blue.600";
+  const pathname = usePathname();
+  const linkColor = "#028dbf";
+  const linkHoverColor = "#19A4F0";
+  const popoverContentBgColor = "white";
+  const activeBorderColor = "#19A4F0"; // Border color for the active menu
 
-  const { onToggle, onOpen, onClose, isOpen } = useDisclosure();
   return (
-    <>
-      <Stack direction={"column"}>
-        <Stack direction={"row"} spacing={4} alignItems={"center"}>
-          {menus.map((navItem) => (
-            <Box key={navItem.title}>
-              <Popover trigger={"hover"} placement={"bottom-start"}>
-                <PopoverTrigger>
-                  <Box
-                    as={Link}
-                    p={3}
-                    href={navItem.path ?? "#"}
-                    fontSize={{ base: "0.4rem", lg: "1rem" }}
-                    fontWeight={{ base: "400", lg: "700" }}
-                    color={linkColor}
-                    _hover={{
-                      color: linkHoverColor
-                    }}
-                  >
-                    {navItem.title}
-                  </Box>
-                </PopoverTrigger>
+    <Stack direction={"row"} spacing={7}>
+      {menus.map((navItem) => (
+        <Box key={navItem.title} position="relative">
+          <Popover trigger={"hover"} placement={"bottom-start"}>
+            <PopoverTrigger>
+              <Box
+                as={Link}
+                p={2}
+                href={navItem.path ?? "#"}
+                fontSize={"md"}
+                fontWeight={600}
+                textTransform={"uppercase"}
+                color={
+                  pathname === (navItem.path || "/")
+                    ? linkHoverColor
+                    : linkColor
+                }
+                _hover={{
+                  color: linkHoverColor,
+                  "::after": {
+                    content: '""',
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    bottom: "-4px", // Adjust this to control the spacing below the text
+                    height: "3px", // Adjust this to control the thickness of the underline
+                    backgroundColor: linkHoverColor
+                  }
+                }}
+                position="relative"
+                _after={{
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  bottom: "-4px", // Adjust this to control the spacing below the text
+                  height: "3px", // Adjust this to control the thickness of the underline
+                  backgroundColor:
+                    pathname === navItem.path
+                      ? activeBorderColor
+                      : "transparent"
+                }}
+              >
+                {navItem.title}
+              </Box>
+            </PopoverTrigger>
 
-                {navItem.childs && (
-                  <PopoverContent
-                    border={0}
-                    boxShadow={"xl"}
-                    borderRadius={0}
-                    minW={"2xs"}
-                    maxW={200}
-                    zIndex={99}
-                  >
-                    <Stack rowGap={0}>
-                      {navItem.childs.map((child) => (
-                        <DesktopSubNav key={child.title} {...child} />
-                      ))}
-                    </Stack>
-                  </PopoverContent>
-                )}
-              </Popover>
-            </Box>
-          ))}
-        </Stack>
-      </Stack>
-      <ModalBase isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-        <FormPoup title="Để lại thông tin" />
-      </ModalBase>
-    </>
+            {navItem.childs && (
+              <PopoverContent
+                border={0}
+                boxShadow={"xl"}
+                bg={popoverContentBgColor}
+                p={4}
+                rounded={"xl"}
+                minW={"sm"}
+              >
+                <Stack>
+                  {navItem.childs.map((child) => (
+                    <DesktopSubNav key={child.title} {...child} />
+                  ))}
+                </Stack>
+              </PopoverContent>
+            )}
+          </Popover>
+        </Box>
+      ))}
+    </Stack>
   );
 };
 
 export const DesktopSubNav = ({ title, path }: INavItem) => {
   return (
     <Box
-      bg={"linear-gradient(180deg, #fff 0%, #f8f9fa 100%)"}
-      className="boxtoo"
       as={Link}
       href={path}
       role={"group"}
       display={"block"}
-      _hover={{ bg: "facebook.800", color: "white" }}
+      p={2}
+      rounded={"md"}
     >
-      <Stack gap={0} direction={"row"} align={"center"} className="stacktit">
+      <Stack direction={"row"} align={"center"}>
         <Box>
           <Text
-            p={4}
             transition={"all .3s ease"}
-            color={"#054659"}
-            _groupHover={{ color: "facebook.800" }}
-            fontWeight={600}
+            color={"black"}
+            _groupHover={{ color: "#558dd9" }}
+            fontSize={"14px"}
+            fontWeight={400}
           >
             {title}
           </Text>
         </Box>
+        <Flex
+          transition={"all .3s ease"}
+          transform={"translateX(-10px)"}
+          opacity={0}
+          _groupHover={{ opacity: "100%", transform: "translateX(0)" }}
+          justify={"flex-end"}
+          align={"center"}
+          flex={1}
+        >
+          <Icon color={"#558dd9"} w={5} h={5} as={BsChevronRight} />
+        </Flex>
       </Stack>
     </Box>
   );

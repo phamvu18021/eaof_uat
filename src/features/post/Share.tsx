@@ -1,8 +1,5 @@
 "use client";
-import { FormMain } from "@/components/FormContact";
-import { FormWrapper } from "@/components/FormWrapper";
-import { ScrollView } from "@/components/ScrollView";
-import { Box, Heading } from "@chakra-ui/react";
+
 import { Icon, IconButton, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 import { BsLink45Deg } from "react-icons/bs";
@@ -10,11 +7,11 @@ import { FiMail } from "react-icons/fi";
 import { ImFacebook } from "react-icons/im";
 
 export const Share = ({ url }: { url?: string }) => {
-  const domain = process.env.NEXT_PUBLIC_DOMAIN || "";
+  const domain = process.env.NEXT_PUBLIC_DOMAIN_TSEH || "";
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(`${domain}/${url}`);
+      await navigator.clipboard.writeText(`${domain}/vi/${url}`);
       alert("Link đã được sao chép!");
     } catch (err) {
       alert("Không thể sao chép link, hãy thử lại.");
@@ -41,28 +38,13 @@ export const Share = ({ url }: { url?: string }) => {
         p={"16px"}
         variant={"outline"}
         w={"35px"}
-        _hover={{}}
       />
-
-      <Box pt={"24px"} className="fromsign" display={"none"}>
-        <Heading
-          as={"h3"}
-          size={"sm"}
-          pb={"20px"}
-          textAlign={{ base: "center", lg: "center" }}
-        >
-          ĐĂNG KÝ NGAY ĐỂ NHẬN TƯ VẤN
-        </Heading>
-        <ScrollView>
-          <FormWrapper type="form-main" />
-        </ScrollView>
-      </Box>
       <IconButton
         icon={<Icon as={FiMail} w={"18px"} h={"18px"} />}
         as={Link}
         href={`mailto:?subject=${encodeURIComponent(
-          "Bài viết trang Evstep"
-        )}&body=${encodeURIComponent(`Xem bài viết tại: ${domain}/${url}`)}`}
+          "Bài viết "
+        )}&body=${encodeURIComponent(`Xem bài viết tại: ${domain}/vi/${url}`)}`}
         aria-label="email"
         rounded={"full"}
         p={"16px"}

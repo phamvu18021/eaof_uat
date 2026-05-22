@@ -1,202 +1,99 @@
 "use client";
 
-import styles from "@/styles/Home.module.css";
 import {
   Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
   Container,
+  Flex,
   GridItem,
   Heading,
-  List,
-  ListItem,
-  SimpleGrid,
-  Text
+  SimpleGrid
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { ReactNode } from "react";
-import { BranchNganh } from "@/components/Branch";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { Box as ChakraBox, Skeleton } from "@chakra-ui/react";
-import { ScrollView } from "@/components/ScrollView";
+import { FormWrapper } from "@/components/FormWrapper";
 
-const FormWrapper = dynamic(
-  () => import("@/components/FormWrapper").then((mod) => mod.FormWrapper),
-  {
-    loading: () => (
-      <Skeleton height="38vh">
-        <ChakraBox height="38vh"></ChakraBox>
-      </Skeleton>
-    )
-  }
+const flipFromTop = keyframes`
+  from { transform: perspective(400px) rotateX(-90deg); opacity: 0; }
+  to   { transform: perspective(400px) rotateX(0deg);  opacity: 1; }
+`;
+
+const Categorys = dynamic(() =>
+  import("@/features/home/Categorys").then((mod) => mod.Categorys)
 );
 
+const Contact = dynamic(() =>
+  import("@/components/Contact").then((mod) => mod.Contact)
+);
 export const LayoutNganh = ({
   children,
   title,
-  path,
-  titleNganh,
-  programs
+  backgroundImage
 }: {
   children?: ReactNode;
   title?: string;
-  path?: string;
-  titleNganh?: string;
-  programs?: any;
+  backgroundImage?: string;
 }) => {
   return (
     <>
-      <Box pos={"relative"} zIndex={0} bg={"blue.900"}>
-        <Container
-          maxW="7xl"
-          py={"48px"}
-          className={styles["context"]}
-          pos={"absolute"}
-          top={{ lg: "242px", base: "125px" }}
-          left={"50%"}
-          transform={"translateX(-50%)"}
-        >
-          <Heading as="h1" size={"lg"} pb="16px" color={"white"}>
-            {title}
-          </Heading>
-          <Breadcrumb color={"White "} fontWeight={"bold"} fontSize={"18px"}>
-            <BreadcrumbItem>
-              <BreadcrumbLink href={"/"}>Trang chủ</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href={path} color={"white !important"}>
-                {titleNganh}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+      <Box
+        w={"100%"}
+        bg="rgba(0, 0, 0, 0)"
+        bgSize="cover"
+        bgRepeat={"no-repeat"}
+        position="relative"
+        p={{ lg: "64px 0", md: "64px 0", base: "32px 0" }}
+      >
+        <Box
+          pos="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bgImage={backgroundImage}
+          zIndex={-1}
+          filter="auto"
+          brightness="45%"
+          bgSize="cover"
+          bgRepeat={"no-repeat"}
+          bgPosition={"0 100%"}
+          height={"350px"}
+        ></Box>
+        <Container maxW={"6xl"} py={"90px"}>
+          <Flex justifyContent="center">
+            <Heading
+              as="h1"
+              color="white"
+              animation={`${flipFromTop} 2s ease-in-out`}
+            >
+              {title}
+            </Heading>
+          </Flex>
         </Container>
-        <Box className={styles["area"]} bg={"blue.900"} w={"100%"}>
-          <List className={styles["circles"]}>
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-          </List>
-        </Box>
       </Box>
       <Box color={"blue.900"}>
         <Box>
-          <Container maxW={"7xl"} py="42px">
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={"24px"}>
+          <Container maxW={"6xl"} pt={`42px`}>
+            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={"44px"}>
               <GridItem colSpan={{ base: 1, md: 2 }}>{children}</GridItem>
-              <GridItem>
+              <GridItem mt={{ lg: "40px", base: "0" }}>
                 <Box
-                  mt={{ base: "24px", lg: 0 }}
+                  mt={{ base: "0", lg: "sm" }}
                   boxShadow="0px 3px 20px rgba(0, 33, 71, 0.06)"
-                  p="6"
+                  px="6"
                   bg="white"
+                  pt="6"
                 >
-                  <Heading
-                    as={"h2"}
-                    size={{ base: "md" }}
-                    pb={"12px"}
-                    fontSize={"22px"}
-                  >
-                    Đăng ký xét tuyển không cần thi
-                  </Heading>
-                  <ScrollView>
-                    <FormWrapper type="form-main" />
-                  </ScrollView>
+                  <FormWrapper
+                    type="form-main"
+                    title=" Đăng ký xét tuyển không cần thi"
+                    color="#028dbf"
+                  />
                 </Box>
-                <BranchNganh
-                  name=""
-                  src=""
-                  overview={[]}
-                  jobs={[]}
-                  program={{
-                    credits: "124",
-                    subjects: "42",
-                    list: programs || [
-                      {
-                        title: "Đã có bằng cao đẳng khác khối ngành",
-                        content: "2,5 năm"
-                      },
-                      {
-                        title: "Đã có bằng cao đẳng cùng khối ngành",
-                        content: "2 năm"
-                      },
-                      {
-                        title: "Đã có bằng Đại học cùng, khác khối ngành",
-                        content: "2 năm"
-                      }
-                    ]
-                  }}
-                />
               </GridItem>
             </SimpleGrid>
           </Container>
-        </Box>
-      </Box>
-    </>
-  );
-};
-
-export const Layout = ({
-  title,
-  path,
-  titleNganh,
-  title_p
-}: {
-  children?: ReactNode;
-  title?: string;
-  path?: string;
-  titleNganh?: string;
-  title_p?: boolean;
-}) => {
-  return (
-    <>
-      <Box pos={"relative"} zIndex={0} bg={"blue.900"}>
-        <Container
-          maxW="7xl"
-          py={"48px"}
-          className={styles["context"]}
-          pos={"absolute"}
-          top={{ lg: "242px", base: "125px" }}
-          left={"50%"}
-          transform={"translateX(-50%)"}
-        >
-          <Heading
-            as={title_p ? "p" : "h1"}
-            size={"lg"}
-            pb="16px"
-            color={"white"}
-          >
-            {title}
-          </Heading>
-          <Breadcrumb color={"White "} fontWeight={"bold"} fontSize={"18px"}>
-            <BreadcrumbItem>
-              <BreadcrumbLink href={"/"}>Trang chủ</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href={path} color={"white !important"}>
-                {" "}
-                {titleNganh}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
-        </Container>
-        <Box className={styles["area"]} bg={"blue.900"} w={"100%"}>
-          <List className={styles["circles"]}>
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-          </List>
         </Box>
       </Box>
     </>
@@ -204,86 +101,43 @@ export const Layout = ({
 };
 
 export const LayoutLkg = ({
-  children,
-  title,
-  path,
-  titleNganh
+  children
 }: {
   children?: ReactNode;
   title?: string;
   path?: string;
   titleNganh?: string;
 }) => {
+  const [home_content, setHomeContent] = useState<any>(null);
+
+  useEffect(() => {
+    const getHomeContent = async () => {
+      try {
+        const res = await fetch(`/api/content-page/?type=trang-chu`, {
+          next: { revalidate: 3 }
+        });
+        if (!res.ok) {
+          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
+        }
+        const data = await res.json();
+        setHomeContent(data?.contentPage[0]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getHomeContent();
+  }, []);
   return (
-    <>
-      <Box pos={"relative"} zIndex={0} bg={"blue.900"}>
-        <Container
-          maxW="7xl"
-          py={"48px"}
-          className={styles["context"]}
-          pos={"absolute"}
-          top={{ lg: "242px", base: "125px" }}
-          left={"50%"}
-          transform={"translateX(-50%)"}
-        >
-          <Heading as="h1" size={"lg"} pb="16px" color={"white"}>
-            {title}
-          </Heading>
-          <Breadcrumb color={"White "} fontWeight={"bold"} fontSize={"18px"}>
-            <BreadcrumbItem>
-              <BreadcrumbLink href={"/"}>Trang chủ</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href={path} color={"white !important"}>
-                {" "}
-                {titleNganh}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+    <Box color={"blue.900"}>
+      <Box>
+        <Container maxW={"6xl"} py="42px" px={"24px"}>
+          {children}
+          <Box mt={{ base: "24px", lg: 0 }}>
+            <Contact />
+          </Box>
+          <Categorys cac_nganh_dao_tao={home_content?.acf?.cac_nganh_dao_tao} />
         </Container>
-        <Box className={styles["area"]} bg={"blue.900"} w={"100%"}>
-          <List className={styles["circles"]}>
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
-          </List>
-        </Box>
       </Box>
-      <Box color={"blue.900"}>
-        <Box>
-          <Container maxW={"7xl"} py="42px">
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={"24px"}>
-              <GridItem colSpan={{ base: 1, md: 2 }}>{children}</GridItem>
-              <GridItem>
-                <Box
-                  mt={{ base: "24px", lg: 0 }}
-                  boxShadow="0px 3px 20px rgba(0, 33, 71, 0.06)"
-                  p="6"
-                  bg="white"
-                >
-                  <Heading
-                    as={"h2"}
-                    size={{ base: "md" }}
-                    pb={"12px"}
-                    fontSize={"22px"}
-                  >
-                    Đăng ký xét tuyển không cần thi
-                  </Heading>
-                  <ScrollView>
-                    <FormWrapper type="form-main" />
-                  </ScrollView>
-                </Box>
-              </GridItem>
-            </SimpleGrid>
-          </Container>
-        </Box>
-      </Box>
-    </>
+    </Box>
   );
 };

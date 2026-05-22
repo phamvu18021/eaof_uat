@@ -1,44 +1,31 @@
-import { LichKg } from "@/features/lich-khai-giang";
-import { Metadata } from "next";
-import { getGlobalMetadata } from "@/lib/seo-helper";
+"use client";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return getGlobalMetadata("lich-khai-giang", {
-    title: "Lịch khai Giảng - Đại học Thái Nguyên",
-    description:
-      "Lịch khai giảng hệ đào tạo từ xa Đại học Thái Nguyên - hệ đại học từ xa"
-  });
-}
+import { Loading } from "@/components/Loading";
+import nextDynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 
-async function getLichKgData() {
-  const api_url = process.env.API_URL || "";
-  try {
-    const res = await fetch(`${api_url}/lich-khai-giang/?id=304`, {
-      next: { revalidate: 300 }
-    });
-    if (!res.ok) return { list: [], content: [] };
-    const data = await res.json();
+const LichKg = nextDynamic(
+  () => import("@/features/lich-khai-giang").then((mod) => mod.LichKg),
+  { loading: () => <Loading /> }
+);
 
-    const htmlString = data?.length > 0 ? data[0]?.content?.rendered : ``;
-    const textContent = htmlString.replace(/(&#8211;|<[^>]*>)/g, "");
-    const lines = textContent.split("\n");
-    const list = lines
-      ?.filter((line: string) => line.trim() !== "")
-      ?.map((line: string) => line.trim());
+export default function Page() {
+  const [homeContent, setHomeContent] = useState<any>(null);
 
-    return {
-      list: list || [],
-      content: data || []
+  useEffect(() => {
+    const getHomeContent = async () => {
+      try {
+        const res = await fetch(`/api/content-page/?type=khai-giang`, {
+          next: { revalidate: 3 }
+        } as any);
+        const data = await res.json();
+        setHomeContent(data?.contentPage?.[0]);
+      } catch (error) {
+        console.error(error);
+      }
     };
-  } catch (error) {
-    console.error("LichKg fetch error:", error);
-    return { list: [], content: [] };
-  }
-}
+    getHomeContent();
+  }, []);
 
-export default async function Page() {
-  const { list, content } = await getLichKgData();
-  const page_content = content?.length > 0 ? content[0] : null;
-
-  return <LichKg list={list} isLoading={false} page_content={page_content} />;
+  return <LichKg list={homeContent?.acf?.section_1} />;
 }

@@ -8,7 +8,7 @@ interface ILoading extends SpinnerProps {
 
 export const Loading = (props: ILoading) => {
   return (
-    <Center minH={props?.he || "100px"}>
+    <Center minH={props?.he || "10vh"}>
       <Spinner color="red.500" size={"md"} {...props} />
     </Center>
   );

@@ -15,46 +15,47 @@ export const data_themes = {
       title: "Ngành học",
       childs: [
         {
+          path: "/nganh-ngon-ngu-anh",
+          title: "Ngành Ngôn Ngữ Anh"
+        },
+
+        {
           path: "/nganh-cong-nghe-thong-tin",
-          title: "Công nghệ thông tin"
+          title: "Ngành Công Nghệ Thông Tin"
         },
         {
-          path: "/nganh-dien-tu-vien-thong",
-          title: "Điện tử viễn thông"
-        },
-        {
-          path: "/nganh-quan-tri-kinh-doanh",
-          title: "Quản trị kinh doanh"
+          path: "/nganh-luat",
+          title: "Ngành Luật"
         },
         {
           path: "/nganh-luat-kinh-te",
-          title: "Luật kinh tế"
+          title: "Ngành Luật Kinh Tế"
         },
         {
-          path: "/nganh-thuong-mai-dien-tu",
-          title: "Thương mại điện tử"
-        },
-        {
-          path: "/nganh-ngon-ngu-anh",
-          title: "Ngôn ngữ Anh"
-        },
-        {
-          path: "/nganh-ngon-ngu-trung",
-          title: "Ngôn ngữ Trung"
+          path: "/nganh-quan-tri-kinh-doanh",
+          title: "Ngành Quản Trị Kinh Doanh"
         },
         {
           path: "/nganh-ke-toan",
-          title: "Kế toán"
+          title: "Ngành Kế Toán"
         },
         {
           path: "/nganh-tai-chinh-ngan-hang",
-          title: "Tài chính ngân hàng"
+          title: "Ngành Tài Chính Ngân Hàng "
+        },
+        {
+          path: "/nganh-thuong-mai-dien-tu",
+          title: "Ngành Thương Mại Điện Tử "
+        },
+        {
+          path: "/nganh-quan-tri-khach-san",
+          title: "Ngành Quản Trị Khách Sạn "
+        },
+        {
+          path: "/nganh-quan-tri-dich-vu-du-lich-lu-hanh",
+          title: "Ngành Quản Trị Dịch Vụ Du Lịch và Lữ Hành "
         }
       ]
-    },
-    {
-      path: "/lich-khai-giang", // the url
-      title: "Khai giảng"
     },
     {
       path: "/dang-ky", // the url
@@ -62,27 +63,11 @@ export const data_themes = {
     },
     {
       path: "/tin-tuc", // the url
-      title: "Tin tức" // view rendered
+      title: "Tin tức"
+    },
+    {
+      path: "/lich-khai-giang", // the url
+      title: "Lịch khai giảng"
     }
-  ],
-
-  layouts: {
-    primary_color: "blue.700",
-    header: {
-      header_top: {
-        logo: false,
-        phone: "0914709118",
-        email: "daihoctructuyen@tnu.edu.vn",
-        background_phone_email: { from: "#f68920", to: "#fc5934" },
-        background_left: { from: "#004685", to: "#004956e6" }
-      },
-      header_bottom: {
-        logo: true,
-        phone: "0914709118",
-        email: "daihoctructuyen@tnu.edu.vn",
-        background_phone_email: { from: "#f68920", to: "#fc5934" },
-        background_left: { from: "#004685", to: "#004956e6" }
-      }
-    }
-  }
+  ]
 };

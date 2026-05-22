@@ -1,57 +1,13 @@
 export const replaceSeoRM = (input: string) => {
+  if (!input) return "";
+
+  // Replace all occurrences of admin.tuyensinh-ehou.vn and ehou.aum.edu.vn with tuyensinh-ehou.vn,
+  // except when followed by /wp-content or /wp-includes (WordPress static/media assets)
   input = input.replace(
-    `link rel="canonical" href="https://etnu.aum.edu.vn`,
-    `link rel="canonical" href="https://etnu.edu.vn`
-  );
-  input = input.replace(
-    `meta property="og:url" content="https://etnu.aum.edu.vn`,
-    `meta property="og:url" content="https://etnu.edu.vn`
+    /https:\/\/(?:admin\.tuyensinh-ehou\.vn|ehou\.aum\.edu\.vn)(?!\/wp-content|\/wp-includes)/g,
+    "https://tuyensinh-ehou.vn"
   );
 
-  input = input.replace(
-    `"@id":"https://etnu.aum.edu.vn/#organization"`,
-    `"@id":"https://etnu.edu.vn/#organization"`
-  );
-  input = input.replace(
-    `https://etnu.aum.edu.vn/#logo`,
-    `https://etnu.edu.vn/#logo`
-  );
-  input = input.replace(
-    `https://etnu.aum.edu.vn/#website`,
-    `https://etnu.edu.vn/#website`
-  );
-  input = input.replace(
-    `https://etnu.aum.edu.vn/#webpage`,
-    `https://etnu.edu.vn/#webpage`
-  );
-  input = input.replace(
-    `"url":"https://etnu.aum.edu.vn"`,
-    `"url":"https://etnu.edu.vn"`
-  );
-
-  input = input.replace(
-    `"@type":"WebPage","@id":"https://etnu.aum.edu.vn`,
-    `"@type":"WebPage","@id":"https://etnu.edu.vn`
-  );
-
-  input = input.replace(
-    `#webpage","url":"https://etnu.aum.edu.vn`,
-    `#webpage","url":"https://etnu.edu.vn`
-  );
-
-  input = input.replace(
-    `"mainEntityOfPage":{"@id":"https://etnu.aum.edu.vn/`,
-    `"mainEntityOfPage":{"@id":"https://etnu.edu.vn/`
-  );
-  input = input.replace(
-    `"worksFor":{"@id":"https://etnu.aum.edu.vn/#organization`,
-    `"worksFor":{"@id":"https://etnu.edu.vn/#organization`
-  );
-
-  input = input.replace(
-    `"sameAs":["https://etnu.aum.edu.vn"]`,
-    `"sameAs":["https://etnu.edu.vn"]`
-  );
   input = input.replace("noindex", "index");
   input = input.replace("nofollow", "follow");
 

@@ -2,25 +2,16 @@ import { Luat } from "@/features/nganh-luat";
 import { Metadata } from "next";
 import { getGlobalMetadata } from "@/lib/seo-helper";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   return getGlobalMetadata("nganh-luat", {
-    title: "Ngành luật - Đại học Thái Nguyên",
+    title: "Ngành Luật - Trường Đại học Mở Hà Nội",
     description:
-      "Ngành luật - Đại học Thái Nguyên, thông tin ngành tế Đại học Thái nguyên"
+      "Ngành Luật hệ đại học từ xa Trường Đại học Mở Hà Nội. Bằng cấp được Bộ GD&ĐT công nhận."
   });
 }
 
-async function getPageData() {
-  const domain = process.env.NEXT_PUBLIC_DOMAIN || "https://etnu.edu.vn";
-  const res = await fetch(`${domain}/api/content-page/?type=nganh-luat`, {
-    next: { revalidate: 300 }
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data?.posts?.[0] || null;
-}
-
-export default async function Page() {
-  const data = await getPageData();
-  return <Luat initialData={data} />;
+export default function Page() {
+  return <Luat />;
 }

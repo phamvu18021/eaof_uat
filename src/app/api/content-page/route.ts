@@ -1,35 +1,26 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
   const type = searchParams.get("type") || "";
-  const api_url = process.env.API_URL || "";
+  const api_url = process.env.API_URL_TSEH || "";
   const hasSSL = process.env.NEXT_PUBLIC_HAS_SSL || "true";
+  if (hasSSL === "false") process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
 
-  if (hasSSL === "false") {
-    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
-  }
+  let contentPage: any[] = [];
 
   try {
     const endPoint = `${api_url}/${type}`;
     const res = await fetch(endPoint, {
-      next: { revalidate: 300 }
+      next: { revalidate: 1 }
     });
-
     if (!res.ok) {
-      return NextResponse.json(
-        { error: "Fetch failed" },
-        { status: res.status }
-      );
+      throw new Error(`Posts fetch failed with status: ${res.statusText}`);
     }
-
-    const posts = await res.json();
-    return NextResponse.json({ posts });
+    contentPage = (await res?.json()) || [];
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
   }
+
+  return NextResponse.json({ contentPage });
 }

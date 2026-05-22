@@ -19,14 +19,15 @@ export function parseMetadata(headString: string): Metadata {
     getMatch(/<meta\s+property="og:description"\s+content="([^"]*)"/);
 
   const ogImage = getMatch(/<meta\s+property="og:image"\s+content="([^"]*)"/);
-  const ogUrl = getMatch(/<meta\s+property="og:url"\s+content="([^"]*)"/)?.replace(
-    /\/$/,
-    ""
-  );
+  const ogUrl = getMatch(/<meta\s+property="og:url"\s+content="([^"]*)"/);
+  const canonical = getMatch(/<link\s+rel="canonical"\s+href="([^"]*)"/);
+  const robots =
+    getMatch(/<meta\s+name="robots"\s+content="([^"]*)"/) || "index, follow";
 
   return {
     title,
     description,
+    robots,
     openGraph: {
       title,
       description,
@@ -34,7 +35,7 @@ export function parseMetadata(headString: string): Metadata {
       url: ogUrl
     },
     alternates: {
-      canonical: ogUrl
+      canonical: canonical || ogUrl
     }
   };
 }

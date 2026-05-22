@@ -1,34 +1,24 @@
-import { NextResponse } from "next/server";
 import { fetchAuth } from "@/ultil/fetchAuth";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
   const type = searchParams.get("type") || "";
   const page = searchParams.get("page") || "";
+  const api_url = process.env.API_URL_TSEH || "";
+  const idNew = searchParams.get("idNew") || "";
+  const idNotifi = searchParams.get("idNotifi") || "";
 
-  const api_url =
-    process.env.API_URL || "https://etnu.aum.edu.vn/wp-json/wp/v2";
   let posts: any[] = [];
   let totalPosts: string = "0";
 
   try {
-    const idNew = 4;
-    const idNotifi = 5;
     const id = type === "news" ? idNew : type === "notifis" ? idNotifi : null;
-
     const endPoint = id
-      ? `${api_url}/posts?_embed&per_page=10&status=publish&page=${page}&categories=${id}`
-      : `${api_url}/posts?_embed&per_page=10&status=publish&page=${page}`;
+      ? `${api_url}/posts?_embed&per_page=8&status=publish&page=${page}&categories=${id}`
+      : `${api_url}/posts?_embed&per_page=8&status=publish&page=${page}`;
 
-    const res = await fetchAuth({ url: endPoint, revalidate: 300 });
-
-    if (!res.ok) {
-      return NextResponse.json(
-        { error: "Fetch failed" },
-        { status: res.status }
-      );
-    }
-
+    const res = await fetchAuth({ url: endPoint, revalidate: 1 });
     let ttp = Number(res.headers?.get("X-WP-Total") || "0");
     if (ttp > 5) {
       totalPosts = String(ttp - 5);
@@ -37,9 +27,20 @@ export async function GET(request: Request) {
     }
 
     const postsNotFeatureImage: any[] = (await res?.json()) || [];
+    const filteredPosts = postsNotFeatureImage.filter((post) => {
+      const slug = post.slug || "";
+      const excludedSlugs = [
+        "lich-khai-giang",
+        "form-main",
+        "form-poup",
+        "gioi-thieu",
+        "cta"
+      ];
+      return !excludedSlugs.includes(slug);
+    });
     posts =
-      postsNotFeatureImage?.length > 0
-        ? postsNotFeatureImage?.map((post: any) => {
+      filteredPosts?.length > 0
+        ? filteredPosts?.map((post: any) => {
             const featured_image =
               post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
 
@@ -49,13 +50,9 @@ export async function GET(request: Request) {
             };
           })
         : [];
-
-    return NextResponse.json({ posts, totalPosts });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
   }
+
+  return NextResponse.json({ posts, totalPosts });
 }

@@ -2,7 +2,11 @@
 
 import { Container, GridItem, SimpleGrid } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { Sidebar } from "../components/Sidebar";
+import dynamic from "next/dynamic";
+
+const Sidebar = dynamic(() =>
+  import("@/layouts/components/Sidebar").then((mod) => mod.Sidebar)
+);
 
 export const LayoutBottom = ({
   children,
@@ -12,10 +16,10 @@ export const LayoutBottom = ({
   sticky?: string;
 }) => {
   return (
-    <Container maxW={"7xl"}>
-      <SimpleGrid columns={{ base: 1, lg: 4 }} spacing={"8"}>
-        <GridItem colSpan={{ base: 1, lg: 3 }}>{children}</GridItem>
-        <GridItem className="sidebar-posts" colSpan={{ base: 1, lg: 1 }}>
+    <Container maxW={"7xl"} pt={10}>
+      <SimpleGrid columns={{ base: 2, lg: 3 }} gap={"24px"}>
+        <GridItem colSpan={{ base: 3, lg: 2 }}>{children}</GridItem>
+        <GridItem className="sidebar-posts" colSpan={{ base: 3, lg: 1 }}>
           <Sidebar sticky={sticky} />
         </GridItem>
       </SimpleGrid>

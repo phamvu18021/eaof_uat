@@ -4,93 +4,172 @@ import { clean } from "@/lib/sanitizeHtml";
 import styles from "@/styles/Post.module.css";
 import { formatDate } from "@/ultil/date";
 import Link from "next/link";
-import { SamePosts } from "./Sames";
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Share } from "./Share";
+import parse, {
+  domToReact,
+  Element,
+  HTMLReactParserOptions,
+  DOMNode
+} from "html-react-parser";
 
-export const Post = ({ post }: { post: any }) => {
-  const catIds = post?.categories || [];
-  const catId = catIds[0];
-  useEffect(() => {
-    const insertToggleButton = () => {
-      const tocContainer = document.getElementById("toc_container");
+const transformLinks = (html: string) => {
+  const options: HTMLReactParserOptions = {
+    replace: (node: DOMNode) => {
+      if (node.type === "tag" && node.name === "a") {
+        const el = node as Element;
+        const href = el.attribs?.href;
 
-      if (tocContainer) {
-        if (!tocContainer.querySelector(".toc-toggle-container")) {
-          const toggleContainer = document.createElement("div");
-          toggleContainer.className = "toc-toggle-container";
-          toggleContainer.style.display = "flex";
-          toggleContainer.style.justifyContent = "space-between";
-          toggleContainer.style.marginBottom = "10px";
-
-          const textElement = document.createElement("div");
-          textElement.textContent = "Mục lục";
-
-          const toggleButton = document.createElement("button");
-          toggleButton.className = "toc-toggle-btn";
-          toggleButton.style.marginLeft = "10px";
-
-          const svgIcon = `
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-          <g id="SVGRepo_iconCarrier">
-            <path d="M8 6.00067L21 6.00139M8 12.0007L21 12.0015M8 18.0007L21 18.0015M3.5 6H3.51M3.5 12H3.51M3.5 18H3.51M4 6C4 6.27614 3.77614 6.5 3.5 6.5C3.22386 6.5 3 6.27614 3 6C3 5.72386 3.22386 5.5 3.5 5.5C3.77614 5.5 4 5.72386 4 6ZM4 12C4 12.2761 3.77614 12.5 3.5 12.5C3.22386 12.5 3 12.2761 3 12C3 11.7239 3.22386 11.5 3.5 11.5C3.77614 11.5 4 11.7239 4 12ZM4 18C4 18.2761 3.77614 18.5 3.5 18.5C3.22386 18.5 3 18.2761 3 18C3 17.7239 3.22386 17.5 3.5 17.5C3.77614 17.5 4 17.7239 4 18Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-          </g>
-        </svg>
-      `;
-
-          toggleButton.innerHTML = svgIcon;
-
-          toggleContainer.appendChild(textElement);
-          toggleContainer.appendChild(toggleButton);
-
-          tocContainer.insertBefore(toggleContainer, tocContainer.firstChild);
-
-          const tocList = tocContainer.querySelector(".toc_list");
-          if (tocList) {
-            tocList.classList.add("show");
+        // Kiểm tra nếu link là domain chính ehou.vn hoặc có slug sau đó
+        if (!/\/vi\//.test(href)) {
+          // Kiểm tra nếu là một link ngoài (không phải ehou.vn)
+          if (!/^https:\/\/(www\.)?ehou\.vn/.test(href)) {
+            return (
+              <a href={href} target="_blank" rel="noopener noreferrer">
+                {domToReact(el.children as DOMNode[])}
+              </a>
+            );
           }
 
-          toggleButton.addEventListener("click", () => {
-            if (tocList) {
-              tocList.classList.toggle("show");
-            }
+          // Nếu là đúng domain gốc ehou.vn hoặc subdomains của ehou.vn thì mới xử lý thêm /vi
+          if (
+            href === "https://tuyensinh-ehou.vn" ||
+            href === "https://tuyensinh-ehou.vn/" ||
+            href === "/"
+          ) {
+            return (
+              <a href={href} target="_blank" rel="noopener noreferrer">
+                {domToReact(el.children as DOMNode[])}
+              </a>
+            );
+          }
+
+          // Nếu có slug (sau https://tuyensinh-ehou.vn/), thêm /vi vào
+          const finalHref = href.startsWith("/")
+            ? `/vi${href}`
+            : `https://tuyensinh-ehou.vn/vi${href.split("https://tuyensinh-ehou.vn")[1]}`;
+
+          return (
+            <Link href={finalHref}>{domToReact(el.children as DOMNode[])}</Link>
+          );
+        }
+
+        // Link ngoài => giữ nguyên hoặc thêm target="_blank"
+        return (
+          <a href={href} target="_blank" rel="noopener noreferrer">
+            {domToReact(el.children as DOMNode[])}
+          </a>
+        );
+      }
+    }
+  };
+
+  return parse(html, options);
+};
+
+export const Post = ({ post }: { post: any }) => {
+  const [, setShowStickyBox] = useState(false);
+  const [showToc, setShowToc] = useState(false);
+  const [tocContent, setTocContent] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!post) {
+      router.replace("/404");
+    }
+  }, [post, router]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollThreshold = 620;
+      const scrollPosition = window.scrollY;
+      const footer = document.getElementById("footer");
+      const footerOffsetTop = footer ? footer.offsetTop : Infinity;
+
+      if (
+        scrollPosition > scrollThreshold &&
+        scrollPosition < footerOffsetTop - window.innerHeight
+      ) {
+        setShowStickyBox(true);
+        setShowToc(true);
+
+        const ezTocContainer = document.getElementById("ez-toc-container");
+        if (ezTocContainer && !tocContent) {
+          const tocClone = ezTocContainer.innerHTML;
+          setTocContent(tocClone);
+        }
+      } else {
+        setShowStickyBox(false);
+        setShowToc(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [tocContent]);
+
+  useEffect(() => {
+    const scrollToId = (href: string) => {
+      const match = href?.match(/#(.+)$/);
+      if (match && match[1]) {
+        const id = match[1];
+        const targetElement = document.getElementById(id);
+        if (targetElement) {
+          const offset = 150;
+          const top = targetElement.getBoundingClientRect().top;
+          window.scrollTo({
+            top: window.scrollY + top - offset,
+            behavior: "smooth"
           });
         }
       }
     };
 
-    insertToggleButton();
-  }, [post]);
+    const bindAnchorScroll = (selector: string) => {
+      const links = document.querySelectorAll(selector);
+      links.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const href = link.getAttribute("href") || "";
+          scrollToId(href);
+        });
+      });
+    };
+
+    bindAnchorScroll('#ez-toc-container a[href*="#"]');
+    bindAnchorScroll('.toc-sticky-box a[href*="#"]');
+  }, [post, showToc, tocContent]);
+
+  if (!post) return <p>Không có dữ liệu bài viết.</p>;
+
+  const cleanedContent = clean(post?.content?.rendered || "");
+  const parsedContent = transformLinks(cleanedContent);
+
   return (
     <article className={styles["post"]}>
+      <div className={styles["post--share"]}>
+        <Share url={post?.slug || "#"} />
+      </div>
       <main>
-        {post && (
-          <>
-            <div className={styles["post__main"]}>
-              <div className={styles["post__heading"]}>
-                <h1
-                  dangerouslySetInnerHTML={{
-                    __html: clean(post?.title?.rendered)
-                  }}
-                />
-                <span>{formatDate(post?.date)}</span>
-              </div>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: clean(post?.content?.rendered)
-                }}
-              />
-            </div>
+        <div className={styles["post__main"]}>
+          <div className={styles["post__heading"]}>
+            <h1
+              dangerouslySetInnerHTML={{
+                __html: clean(post?.title?.rendered)
+              }}
+            />
+            <span>{formatDate(post?.date)}</span>
+          </div>
 
-            <SamePosts catId={catId} id={post?.id} />
-          </>
-        )}
+          {/* ✅ Hiển thị nội dung bài viết đã được xử lý */}
+          <div className={styles["post__content"]}>{parsedContent}</div>
+        </div>
 
         {!post && (
           <div className={styles["not-found"]}>
             <p>Bài viết này không tồn tại!</p>
-            <Link className={styles["back-new"]} href={"/tin-tuc"}>
+            <Link className={styles["back-new"]} href="/tin-tuc">
               Trở về trang tin tức
             </Link>
           </div>

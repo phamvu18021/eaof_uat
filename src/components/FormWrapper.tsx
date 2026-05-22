@@ -1,20 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { Box, Heading, Skeleton } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { Loading } from "./Loading";
-
-const FormGetFly = dynamic(() =>
-  import("./FormGetFly").then((mod) => mod.FormGetFly)
-);
-const FormSam = dynamic(() =>
-  import("./FormSam").then((mod) => mod.FormSam)
-);
-const FormGoogle = dynamic(() =>
-  import("./FormGoogle").then((mod) => mod.FormGoogle)
-);
+import { Box, Heading, Skeleton } from "@chakra-ui/react";
+import { FormGetFly } from "./FormGetFly";
+import { FormSam } from "./FormSam";
+import { FormGoogle } from "./FormGoogle";
 
 interface FormData {
   type: "form-getfly" | "form-sam" | "form-google" | "unknown";
@@ -26,8 +17,7 @@ interface FormData {
 
 export const FormWrapper = ({
   title,
-  color = "#030d47",
-  type = "form-main"
+  color
 }: {
   title?: string;
   color?: string;
@@ -94,24 +84,16 @@ export const FormWrapper = ({
 
   return (
     <>
-      <Box rounded={"xl"} bg={"white"} p="10px">
-        {title && (
-          <Heading
-            as="h2"
-            fontSize={"26px"}
-            textAlign="center"
-            color={color}
-            pb="10px"
-          >
-            {title}
-          </Heading>
-        )}
-        {formData.type === "form-getfly" && <FormGetFly {...formData} />}
-        {formData.type === "form-sam" && <FormSam {...formData} />}
-        {formData.type === "form-google" && (
-          <FormGoogle url={formData.url} divId={formData.divId} />
-        )}
-      </Box>
+      {title && (
+        <Heading as="h2" size="lg" textAlign="center" color={color} py="10px">
+          {title}
+        </Heading>
+      )}
+      {formData.type === "form-getfly" && <FormGetFly {...formData} />}
+      {formData.type === "form-sam" && <FormSam {...formData} />}
+      {formData.type === "form-google" && (
+        <FormGoogle url={formData.url} divId={formData.divId} />
+      )}
     </>
   );
 };

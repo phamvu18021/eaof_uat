@@ -1,13 +1,22 @@
-FROM node:18-alpine AS deps
+FROM node:22.16.0-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm install
-RUN npm install sharp
 
-FROM node:18-alpine AS builder
+FROM node:22.16.0-alpine AS builder
 WORKDIR /app
+
+# Khai báo ARG cho tất cả biến build-time
+ARG API_URL_TSEH
+ARG API_RMS_URL_TSEH
+ARG NEXT_PUBLIC_DOMAIN_TSEH
+# Set ENV để Next.js build nhận giá trị
+ENV API_URL_TSEH=${API_URL_TSEH}
+ENV API_RMS_URL_TSEH=${API_RMS_URL_TSEH}
+ENV NEXT_PUBLIC_DOMAIN_TSEH=${NEXT_PUBLIC_DOMAIN_TSEH}
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -15,16 +24,11 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN npm run build
 
-FROM node:18-alpine AS runner
+FROM node:22.16.0-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
-ENV API_URL https://etnu.aum.edu.vn/wp-json/wp/v2
-ENV API_RMS_URL https://etnu.aum.edu.vn/wp-json/rankmath/v1/getHead?url=https://etnu.aum.edu.vn
-
-ENV NEXT_PUBLIC_DOMAIN https://etnu.edu.vn
-ENV TOKEN eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJhZG1pbiIsImlhdCI6MTcwMjI3NTUyNCwiZXhwIjoxODU5OTU1NTI0fQ.vBY5wG6ZUhTOVaFWnwnpkHN5aK8-fNB17QoQrTKX14M
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs

@@ -17,6 +17,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     this.state = { hasError: false };
   }
 
+  // eslint-disable-next-line no-unused-vars
   static getDerivedStateFromError(_: Error): ErrorBoundaryState {
     return { hasError: true };
   }
@@ -36,6 +37,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
 export default ErrorBoundary;
 
-function logErrorToMyService(error: Error, componentStack: string | null) {
+// eslint-disable-next-line no-unused-vars
+function logErrorToMyService(
+  error: Error,
+  componentStack: string | null | undefined
+) {
   console.error(error);
 }

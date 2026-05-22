@@ -1,7 +1,8 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const URL = process.env.NEXT_PUBLIC_DOMAIN || "https://etnu.edu.vn";
+  const URL =
+    process.env.NEXT_PUBLIC_DOMAIN_TSEH || "https://tuyensinh-ehou.vn";
   return {
     rules: {
       userAgent: "*",

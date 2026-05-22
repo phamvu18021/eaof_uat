@@ -1,65 +1,38 @@
 "use client";
 
-import { useModal } from "@/components/ModalContext";
-import {
-  HStack,
-  Heading,
-  ListItem,
-  UnorderedList,
-  VStack
-} from "@chakra-ui/react";
-import { BtnTheme } from "./BtnTheme";
-export const Frame = ({
-  title1,
-  title2,
-  label,
-  list1,
-  list2
-}: {
-  title1: string;
-  title2?: string;
-  label: string;
-  list1?: string[];
-  list2?: string[];
-}) => {
-  const { isOpen, onOpen, onClose } = useModal();
+import { Box, HStack, Heading, VStack } from "@chakra-ui/react";
+import { BtnDks } from "./BtnTheme";
+import { ScrollMotionRight } from "./ScrollMotion";
+
+export const Frame = (lists: any) => {
   return (
-    <>
-      <VStack
-        rounded={"sm"}
-        border={"1px solid teal"}
-        padding={"16px"}
-        alignItems={"start"}
-      >
-        <Heading as={"h3"} size={"md"} textAlign={"center"} w={"100%"}>
-          {title1}
-        </Heading>
-
-        <UnorderedList>
-          {list1?.map((item, index) => (
-            <ListItem key={index}>{item}</ListItem>
-          ))}
-        </UnorderedList>
-
-        {title2 && (
-          <>
-            <Heading as={"h3"} size={"md"} textAlign={"center"} w={"100%"}>
-              {title2}
-            </Heading>
-
-            <UnorderedList>
-              {list2?.map((item, index) => (
-                <ListItem key={index}>{item}</ListItem>
-              ))}
-            </UnorderedList>
-          </>
-        )}
-        <HStack justify={"center"} w={"100%"}>
-          <BtnTheme onClick={() => !isOpen && onOpen && onOpen()} bg={"b;"}>
-            {label}
-          </BtnTheme>
-        </HStack>
-      </VStack>
-    </>
+    <Box boxShadow={"2xl"} bg={"white"} p={6} rounded={"md"}>
+      <ScrollMotionRight>
+        <VStack
+          rounded={"sm"}
+          border={"1px solid black"}
+          padding={"16px"}
+          alignItems={"center"}
+          spacing={4}
+          p="6"
+        >
+          <Heading
+            as={"h1"}
+            size={"lg"}
+            textAlign={"center"}
+            w={"100%"}
+            color={"#028dbf"}
+          >
+            {lists?.lists?.title1 || "Cập nhật lịch khai giảng dự kiến"}
+          </Heading>
+          <Box textAlign={"justify"} whiteSpace={"pre-line"}>
+            {lists?.lists?.label || "Dữ liệu đang được cập nhật"}
+          </Box>
+          <HStack justify={"center"} w={"100%"}>
+            <BtnDks />
+          </HStack>
+        </VStack>
+      </ScrollMotionRight>
+    </Box>
   );
 };

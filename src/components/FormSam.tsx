@@ -37,10 +37,8 @@ const createIframeForSam = (
   const iframe = document.createElement("iframe");
   iframe.setAttribute("src", fullUrl);
   iframe.style.width = "100%";
-  iframe.style.minHeight = "380px";
+  iframe.style.minHeight = "450px";
   iframe.classList.add(divClass);
-  iframe.setAttribute("title", fullUrl);
-  iframe.setAttribute("loading", "lazy");
   return iframe;
 };
 

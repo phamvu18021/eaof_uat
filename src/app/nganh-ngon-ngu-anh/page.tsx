@@ -1,31 +1,17 @@
-import { Loading } from "@/components/Loading";
-import dynamic from "next/dynamic";
+import { Nna } from "@/features/nganh-nna";
 import { Metadata } from "next";
 import { getGlobalMetadata } from "@/lib/seo-helper";
 
-const Nna = dynamic<any>(() =>
-  import("@/features/nganh-nna").then((mod) => mod.Nna)
-);
-
-async function getPageData() {
-  const domain = process.env.NEXT_PUBLIC_DOMAIN || "https://etnu.edu.vn";
-  const res = await fetch(`${domain}/api/content-page/?type=nnna`, {
-    next: { revalidate: 300 }
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data?.posts?.[0] || null;
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   return getGlobalMetadata("nganh-ngon-ngu-anh", {
-    title: "Ngành ngôn ngữ Anh - Đại học Thái Nguyên",
+    title: "Ngành Ngôn ngữ Anh - Trường Đại học Mở Hà Nội",
     description:
-      "Ngành ngôn ngữ Anh - Đại học Thái Nguyên, thông tin ngành ngôn ngữ Anh Đại học Thái nguyên"
+      "Ngành Ngôn ngữ Anh hệ đại học từ xa Trường Đại học Mở Hà Nội. Bằng cấp được Bộ GD&ĐT công nhận."
   });
 }
 
-export default async function Page() {
-  const data = await getPageData();
-  return <Nna initialData={data} />;
+export default function Page() {
+  return <Nna />;
 }

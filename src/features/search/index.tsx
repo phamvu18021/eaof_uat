@@ -11,9 +11,14 @@ import {
   Input,
   Text
 } from "@chakra-ui/react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ListSearchPosts } from "./ListSearchPosts";
+import dynamic from "next/dynamic";
+
+const ListSearchPosts = dynamic(() =>
+  import("./ListSearchPosts").then((mod) => mod.ListSearchPosts)
+);
 
 export const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,8 +46,8 @@ export const Search = () => {
   }, [searchQuery]);
 
   useEffect(() => {
-    const keyword = searchParams.get("keyword") || "";
-    setKeyWord(keyword);
+    const keyword = searchParams.get("keyword");
+    setKeyWord(keyword || "");
   }, [searchParams]);
 
   const handleRouter = ({ selected }: { selected: number }) => {
@@ -54,7 +59,7 @@ export const Search = () => {
       <Box
         height={"350px"}
         position={"relative"}
-        py="120"
+        py="120px"
         display={"flex"}
         flexDirection="column"
         alignItems={"center"}
@@ -70,9 +75,16 @@ export const Search = () => {
           opacity={0.8}
           zIndex={"1"}
         ></Box>
+        <Image
+          src={"/sky.png"}
+          alt="image-alt-text"
+          layout="fill"
+          objectFit="cover"
+          objectPosition="0 80%"
+        />
         <Container maxW={"7xl"} zIndex={2}>
           <Box>
-            <Box justifyContent={"center"} pt={"80px"}>
+            <Box justifyContent={"center"} pb={16}>
               <form onSubmit={onSearch}>
                 <HStack justifyContent={"center"} columnGap={0}>
                   <Input

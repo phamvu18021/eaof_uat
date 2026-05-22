@@ -46,7 +46,7 @@ export const InputSearch = ({ type }: { type: string }) => {
             color={"#ffffff"}
             size={"2xl"}
             p={"9px 9px"}
-            bg={"#008AFA"}
+            bg={"#19A4F0"}
             transition={"ease-in-out .4s"}
             _hover={{
               background: "white",

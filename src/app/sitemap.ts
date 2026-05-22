@@ -1,8 +1,9 @@
 import { MetadataRoute } from "next";
 import { menus, TMenus } from "@/router";
 
-const URL = process.env.NEXT_PUBLIC_DOMAIN || "https://etnu.edu.vn";
-const API_URL = process.env.API_URL;
+const URL = process.env.NEXT_PUBLIC_DOMAIN_TSEH || "https://tuyensinh-ehou.vn";
+const API_URL =
+  process.env.API_URL_TSEH || "https://admin.tuyensinh-ehou.vn/wp-json/wp/v2";
 const PER_PAGE = 100;
 
 const getAllPaths = (menus: TMenus): string[] => {
@@ -21,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const resPage1 = await fetch(
-      `${API_URL}/posts?categories=4,5&per_page=${PER_PAGE}&status=publish&page=1&_fields=slug`,
+      `${API_URL}/posts?per_page=${PER_PAGE}&status=publish&page=1&_fields=slug`,
       { next: { revalidate: 300 } }
     );
 
@@ -36,7 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       for (let p = 2; p <= totalPages; p++) {
         fetches.push(
           fetch(
-            `${API_URL}/posts?categories=4,5&per_page=${PER_PAGE}&status=publish&page=${p}&_fields=slug`,
+            `${API_URL}/posts?per_page=${PER_PAGE}&status=publish&page=${p}&_fields=slug`,
             { next: { revalidate: 300 } }
           ).then((r) => (r.ok ? r.json() : []))
         );
@@ -50,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const staticEntries = staticPaths.map((path) => ({
-    url: `${URL}${path === "/" ? "" : (path.startsWith("/") ? path : `/${path}`)}`,
+    url: `${URL}${path === "/" ? "" : path.startsWith("/") ? path : `/${path}`}`,
     lastModified: new Date()
   }));
 

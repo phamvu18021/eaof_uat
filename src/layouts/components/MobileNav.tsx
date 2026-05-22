@@ -1,46 +1,41 @@
 "use client";
-import { SocialButton } from "./HeaderTop";
+
+import { InputSearch } from "@/features/Search/InputSearch";
 import { useSize } from "@/hooks/useSizeWindow";
 import { menus } from "@/router";
+import { CiSearch } from "react-icons/ci";
 import {
-  HStack,
+  Box,
   Collapse,
   Divider,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   Flex,
   Icon,
   IconButton,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Stack,
-  useDisclosure,
-  Input,
-  Box
+  useDisclosure
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRef } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { BsChevronDown, BsJustify } from "react-icons/bs";
-import { HeaderTop } from "./HeaderTop";
+import { BsChevronDown } from "react-icons/bs";
 import { Logo } from "./Logo";
-import { FormInputs } from "@/components/FormInputs";
-import { FaFacebook } from "react-icons/fa";
-import { SiZalo } from "react-icons/si";
-
 interface INavItem {
   title: string;
   childs?: Array<{ title: string; childs?: Array<{}>; path?: string }>;
   path?: string;
   onClose: () => void;
 }
-
 export const MobileNavItem = ({ title, childs, path, onClose }: INavItem) => {
   const { isOpen, onToggle } = useDisclosure();
-
   return (
     <Stack spacing={4} onClick={childs && onToggle}>
       <Flex
@@ -70,7 +65,6 @@ export const MobileNavItem = ({ title, childs, path, onClose }: INavItem) => {
           />
         )}
       </Flex>
-
       <Collapse in={isOpen} animateOpacity style={{ marginTop: "0!important" }}>
         <Stack
           mt={2}
@@ -101,28 +95,56 @@ export const MobileNavItem = ({ title, childs, path, onClose }: INavItem) => {
     </Stack>
   );
 };
-
 export const MobileNav = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef(null);
-
   const { size } = useSize();
   const { width } = size;
-
   return (
     <>
-      <div>
-        <IconButton
-          w={"50px"}
-          h={"50px"}
-          ref={btnRef}
-          onClick={onOpen}
-          icon={<Icon as={AiOutlineMenu} w={"24px"} h={"24px"} />}
-          variant={"ghost"}
-          aria-label={"Toggle Navigation"}
-          color={"gray.800"}
-        />
-
+      <Box>
+        <Flex
+          justifyContent={"space-between"}
+          alignItems="center"
+          lineHeight={"60px"}
+        >
+          <Box>
+            <IconButton
+              w={"50px"}
+              h={"50px"}
+              ref={btnRef}
+              onClick={onOpen}
+              icon={<Icon as={AiOutlineMenu} w={"24px"} h={"24px"} />}
+              variant={"ghost"}
+              aria-label={"Toggle Navigation"}
+              background={"#f7f7f7"}
+            />
+          </Box>
+          <Box>
+            <Logo />
+          </Box>
+          <Box display={{ base: "flex", lg: "none" }}>
+            <Popover placement="bottom">
+              <PopoverTrigger>
+                <IconButton
+                  justifyContent={"flex-end"}
+                  size="2xl"
+                  color="black"
+                  _hover={{}}
+                  bg="transparent"
+                  aria-label="Search database"
+                  icon={<CiSearch width="8em" height="8em" />}
+                  borderRadius={"0"}
+                />
+              </PopoverTrigger>
+              <PopoverContent p={5}>
+                <Box>
+                  <InputSearch type="popover" />
+                </Box>
+              </PopoverContent>
+            </Popover>
+          </Box>
+        </Flex>
         <Drawer
           isOpen={width < 992 ? isOpen : false}
           placement="left"
@@ -139,8 +161,7 @@ export const MobileNav = () => {
               </Flex>
             </DrawerHeader>
             <Divider />
-
-            <DrawerBody bg={"blue.900"} className="test">
+            <DrawerBody bg={"#0c6be3"} className="test">
               <Stack
                 className="test2"
                 color={"white"}
@@ -156,30 +177,13 @@ export const MobileNav = () => {
                 ))}
               </Stack>
               <Box onSubmit={onClose}>
-                <FormInputs />
+                <InputSearch type={"normal"} />
               </Box>
-
-              <HStack py={4} spacing={2} display={{ base: "flex", lg: "flex" }}>
-                <SocialButton
-                  bagr="transparent"
-                  label={"Facebook"}
-                  href={"https://www.facebook.com/TNUElearning"}
-                >
-                  <FaFacebook color="white" />
-                </SocialButton>
-                <SocialButton
-                  bagr="transparent"
-                  label={"Zalo"}
-                  href={"https://zalo.me/0846770022"}
-                >
-                  <SiZalo color="white" />
-                </SocialButton>
-              </HStack>
             </DrawerBody>
             <Divider />
           </DrawerContent>
         </Drawer>
-      </div>
+      </Box>
     </>
   );
 };

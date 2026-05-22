@@ -1,15 +1,19 @@
 "use client";
 
-import { CardBlog } from "@/components/CardBlog";
 import { Loading } from "@/components/Loading";
 import { clean } from "@/lib/sanitizeHtml";
 import { formatDate } from "@/ultil/date";
 import { toSlug } from "@/ultil/toSlug";
 import { Box, Center, GridItem, HStack, SimpleGrid } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
+import dynamic from "next/dynamic";
+
+const CardBlogVert = dynamic(() =>
+  import("@/components/CardBlogVert").then((mod) => mod.CardBlogVert)
+);
 
 const StyledPaginate = styled(ReactPaginate)`
   margin-bottom: 2rem;
@@ -65,34 +69,33 @@ export const ListSearchPosts = ({
   const [isLoading, setIsLoading] = useState(true);
   const [resetpagi, setResetpagi] = useState(false);
 
-  const router = useRouter();
   const searchParams = useSearchParams();
-
+  const pageParam = searchParams.get("page");
   useEffect(() => {
-    const page = searchParams.get("page") || "1";
     setResetpagi(true);
-  }, [searchParams]);
+  }, [pageParam]);
 
   useEffect(() => {
     const keyword = searchParams.get("keyword") || "";
     const page = searchParams.get("page") || "1";
-    const pages = Number(page);
-
+    let keywords = keyword;
+    var pages = Number(page);
     const getPosts = async () => {
       setIsLoading(true);
       try {
         const res = await fetch(
           `/api/search/?type=news&page=${pages}&search=${toSlug({
             type: "signed",
-            input: keyword
+            input: keywords
           })}`,
           {
-            next: { revalidate: 300 }
+            next: { revalidate: 3 }
           }
         );
         if (!res.ok) {
           throw new Error(`Posts fetch failed with status: ${res.statusText}`);
         }
+
         const data: { posts: any[]; totalPosts: string } = await res.json();
         const { posts, totalPosts } = data;
         totalPosts && setTotalPosts(totalPosts);
@@ -105,7 +108,6 @@ export const ListSearchPosts = ({
     };
     getPosts();
   }, [searchParams]);
-
   const len = Math.ceil(Number(totalPosts) / 8);
 
   return (
@@ -115,14 +117,14 @@ export const ListSearchPosts = ({
           <SimpleGrid pt={2} columns={{ base: 1, md: 2, lg: 3 }} spacing={"8"}>
             {posts?.map((post: any, index: number) => (
               <GridItem key={index}>
-                <CardBlog
+                <CardBlogVert
                   title={clean(post?.title?.rendered)}
                   date={post?.date ? formatDate(post.date) : ""}
                   desc={clean(post?.excerpt?.rendered)}
                   tag="Tin tức"
                   bgTag="red.500"
                   image={post?.featured_image || ""}
-                  path={`/${post?.slug}`}
+                  path={`/vi/${post?.slug}`}
                 />
               </GridItem>
             ))}
@@ -149,7 +151,7 @@ export const ListSearchPosts = ({
             pageRangeDisplayed={1}
             marginPagesDisplayed={1}
             activeClassName="active"
-            forcePage={Number(searchParams.get("page") || 1) - 1}
+            forcePage={Number(searchParams.get("page") || "1") - 1}
           />
         </HStack>
       )}

@@ -1,82 +1,87 @@
 "use client";
 
-import { Box, GridItem, HStack, Img, SimpleGrid, Text } from "@chakra-ui/react";
+import { clean } from "@/lib/sanitizeHtml";
+import { Box, Heading, Stack, Tag, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { clean } from "@/lib/sanitizeHtml";
 
 export const CardBlogVert = ({
   title,
-  date,
   tag,
   image,
-  path
+  path,
+  bgTag,
+  date,
+  preview
 }: {
-  date?: string;
   title: string;
   desc: string;
   tag: string;
   image?: string;
   path?: string;
+  bgTag?: string;
+  date?: string;
+  preview?: boolean;
 }) => {
-  const [isMounted, setMount] = useState(false);
-
-  useEffect(() => {
-    setMount(true);
-  }, []);
-
   return (
-    <Box py={4} as={Link} href={path ?? "#"} border={"none"}>
-      <SimpleGrid columns={3} spacing={2}>
-        <GridItem
-          colSpan={1}
-          display={"flex"}
-          justifyContent={"center"}
-          objectFit={"cover"}
-        >
-          <Box pos={"relative"}>
-            <Image
-              width={130}
-              height={110}
-              src={image || `/blog.jpeg`}
-              alt={title}
-            />
-          </Box>
-        </GridItem>
-        <GridItem colSpan={2}>
-          <Text
-            fontSize={"14px"}
-            fontWeight={500}
-            _hover={{ color: "#0d6efd " }}
-            transition={"all ease .3s"}
-            css={{
-              display: "-webkit-box",
-              WebkitLineClamp: "2",
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              textOverflow: "ellipsis"
+    <Box overflow="hidden" as={Link} href={path ?? "#"}>
+      {!preview && (
+        <Box pos={"relative"} overflow={"hidden"} h="260px">
+          <Image
+            width={384}
+            height={256}
+            src={image || `/blog.jpeg`}
+            alt={title || `image`}
+            style={{
+              objectFit: "cover",
+              width: "100%",
+              height: "auto"
             }}
-            dangerouslySetInnerHTML={{ __html: clean(title) }}
           />
-          <HStack>
-            <Text
-              p={1}
-              align={"center"}
-              fontSize={"10px"}
-              w={"-webkit-fit-content"}
-              bg={"black"}
-              color={"white"}
-              gap={0.1}
+
+          <Box pos={"absolute"} bottom={"33px"} left="0px">
+            <Tag
+              size={"xl"}
+              variant="solid"
+              colorScheme="red"
+              fontSize={"sm"}
+              p="6px"
+              whiteSpace={"nowrap"}
+              bg={bgTag || "green.500"}
             >
               {tag}
-            </Text>
-            <Text p={1} align={"center"} fontSize={"xs"} color={"gray.500"}>
-              {date?.slice(5)}
-            </Text>
-          </HStack>
-        </GridItem>
-      </SimpleGrid>
+            </Tag>
+          </Box>
+        </Box>
+      )}
+      <Box color="black">
+        <Heading
+          mt="12px"
+          as={"h3"}
+          size="md"
+          _hover={{ color: "#028dbf" }}
+          transition={"all ease .3s"}
+          dangerouslySetInnerHTML={{ __html: clean(title) }}
+          lineHeight={"28px"}
+          style={{
+            display: "-webkit-box",
+            WebkitLineClamp: 2, // Limit to 2 lines
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            maxHeight: "5em" // Set a fixed height (adjust as needed)
+          }}
+        />
+        <Stack
+          flex={1}
+          mt="10px"
+          flexDirection="row"
+          spacing={2}
+          fontSize={"md"}
+        >
+          <Text fontWeight={600}>Admin</Text>
+          <Text>{date}</Text>
+        </Stack>
+      </Box>
     </Box>
   );
 };

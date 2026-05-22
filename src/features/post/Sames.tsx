@@ -1,6 +1,5 @@
 "use client";
 
-import { CardBlog } from "@/components/CardBlog";
 import {
   Box,
   Button,
@@ -12,7 +11,13 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { clean } from "@/lib/sanitizeHtml";
 import { formatDate } from "@/ultil/date";
+import dynamic from "next/dynamic";
+
+const CardBlogVert = dynamic(() =>
+  import("@/components/CardBlogVert").then((mod) => mod.CardBlogVert)
+);
 
 export const SamePosts = ({ catId, id }: { catId?: string; id?: string }) => {
   const [samePosts, setSamePosts] = useState<any[]>([]);
@@ -23,7 +28,7 @@ export const SamePosts = ({ catId, id }: { catId?: string; id?: string }) => {
         if (catId) {
           // Lấy danh sách các bài viết cùng thể loại
           const res = await fetch(`/api/same-posts/?catId=${catId}&id=${id}`, {
-            next: { revalidate: 300 }
+            next: { revalidate: 3 }
           });
           if (!res.ok) {
             throw new Error(
@@ -41,14 +46,13 @@ export const SamePosts = ({ catId, id }: { catId?: string; id?: string }) => {
 
     getSamePosts();
   }, [catId, id]);
-
   return (
     <>
-      <Divider pt={"32px"} maxW={"7xl"} margin={"0 auto"} />
-      <Box pt={"20px"} maxW={"7xl"} margin={"0 auto"}>
+      <Divider pt={"32px"} />
+      <Box py={"30px"}>
         <HStack justifyContent={"space-between"} pb={"16px"}>
           <Heading as={"h3"} size={"md"}>
-            Bài viết liên quan
+            Có thể bạn quan tâm
           </Heading>
           <Button
             as={Link}
@@ -60,17 +64,20 @@ export const SamePosts = ({ catId, id }: { catId?: string; id?: string }) => {
           </Button>
         </HStack>
 
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={"20px"}>
+        <SimpleGrid columns={{ base: 1, md: 3, lg: 3 }} gap={"20px"}>
           {samePosts.map((postCat, index) => {
             if (index < 3)
               return (
                 <GridItem key={index}>
-                  <CardBlog
-                    date={postCat?.date ? formatDate(postCat.date) : ""}
-                    title={postCat?.title?.rendered}
-                    desc=""
+                  <CardBlogVert
+                    title={clean(postCat?.title?.rendered)}
                     image={postCat?.featured_image || ""}
                     path={`/${postCat.slug}`}
+                    key={index}
+                    date={postCat?.date ? formatDate(postCat.date) : ""}
+                    desc={clean(postCat?.excerpt?.rendered)}
+                    tag="Thông báo"
+                    bgTag="red.500"
                   />
                 </GridItem>
               );

@@ -1,23 +1,18 @@
-import { NextResponse } from "next/server";
 import { fetchAuth } from "@/ultil/fetchAuth";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const api_url = process.env.API_URL || "";
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const api_url = process.env.API_URL_TSEH || "";
   const len = searchParams.get("len") || "9";
   let posts: any[] = [];
 
   try {
     const endPoint = `${api_url}/posts?_embed&per_page=${len}&status=draft&page=1`;
-    const res = await fetchAuth({ url: endPoint });
-
+    const res = await fetchAuth({ url: endPoint, revalidate: 100 });
     if (!res.ok) {
-      return NextResponse.json(
-        { error: "Fetch failed" },
-        { status: res.status }
-      );
+      throw new Error(`Posts fetch failed with status: ${res.statusText}`);
     }
-
     const postsNotFeatureImage: any[] = (await res?.json()) || [];
     posts =
       postsNotFeatureImage?.length > 0
@@ -31,13 +26,9 @@ export async function GET(request: Request) {
             };
           })
         : [];
-
-    return NextResponse.json({ posts });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
   }
+
+  return NextResponse.json({ posts });
 }

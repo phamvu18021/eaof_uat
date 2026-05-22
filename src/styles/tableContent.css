@@ -1,66 +1,47 @@
-/* #toc_container {
-    border: 1px solid black;
-    border-radius: 16px;
-    width: max-content;
-    max-width: 100%;
-    padding: 8px 12px;
-    margin-bottom: 24px;
-  }
-  
-  #toc_container li {
-    list-style: none;
-  }
-  
-  #toc_container li a {
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: 500;
-  }
-  
-  #toc_container .toc_title {
-    font-size: 1.2rem;
-    font-weight: 600;
-  }
-   */
-
-html {
-  scroll-behavior: smooth;
-}
-
-#toc_container {
-  border: 1px solid rgb(209, 209, 209);
-  border-radius: 4px;
+#ez-toc-container {
+  border: 1px solid black;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 100%;
   padding: 8px 12px;
-  margin-bottom: 24px;
-}
-.toc_title {
-  display: none;
-}
-.toc_list li {
-  display: none;
+  box-sizing: border-box;
 }
 
-/* Show the li elements when the .show class is applied to the ul */
-.toc_list.show li {
-  display: block;
-  margin-left: 15px;
+#ez-toc-container ul {
+  padding-left: 15px;
+  margin: 0;
+  width: 100%;
 }
 
-.toc_list.show li a {
+#ez-toc-container li {
+  list-style: none;
+  margin-bottom: 5px;
+  line-height: 1.4;
+  width: 100%;
+}
+
+#ez-toc-container li a {
   text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  display: inline-block;
+  width: 94%;
+  line-height: 1.5;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  white-space: normal;
 }
 
-/* Optional styling for the toggle button */
-.toc-toggle-btn {
-  cursor: pointer;
-  padding: 5px 10px;
-  border: 1px solid rgb(255, 255, 255);
-  color: white;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: background-color 0.3s;
+#ez-toc-container .ez-toc-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
-.toc-toggle-btn:hover {
-  border: 1px solid rgb(209, 209, 209);
+#ez-toc-container .ez-toc-list-level-3 {
+  margin-left: 15px;
+  width: calc(100% - 15px);
 }

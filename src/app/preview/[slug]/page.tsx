@@ -1,39 +1,40 @@
-import { Post } from "@/features/post";
-import { fetchAuth } from "@/ultil/fetchAuth";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { fetchAuth } from "@/ultil/fetchAuth";
+import { Post } from "@/features/post";
 import { notFound } from "next/navigation";
+import { LayoutPost } from "@/layouts/layoutPost";
 
-async function getPreviewPost(id: string) {
-  const api_url = process.env.API_URL || "";
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+async function getPost(slug: string) {
+  const api_url = process.env.API_URL_TSEH || "";
   try {
     const res = await fetchAuth({
-      url: `${api_url}/posts/${id}?_embed`
+      url: `${api_url}/posts/${slug}?_embed`
     });
     if (!res.ok) return null;
-    const post = await res.json();
-    return post || null;
+    return await res.json();
   } catch (error) {
-    console.error("Preview Post fetch error:", error);
+    console.error(error);
     return null;
   }
 }
 
-type Props = {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const post = await getPreviewPost(slug);
+  const post = await getPost(slug);
 
   if (!post) {
     notFound();
   }
 
   return (
-    <ErrorBoundary fallback={<h1>Lỗi phía máy chủ</h1>}>
-      <Post post={post} />
-    </ErrorBoundary>
+    <LayoutPost>
+      <ErrorBoundary fallback={<h1>Lỗi phía máy chủ</h1>}>
+        <Post post={post} />
+      </ErrorBoundary>
+    </LayoutPost>
   );
 }

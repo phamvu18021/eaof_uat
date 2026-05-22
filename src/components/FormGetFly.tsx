@@ -32,7 +32,6 @@ const createIframeForGetFly = (url: string): HTMLIFrameElement => {
   iframe.style.width = "100%";
   iframe.style.minHeight = "450px";
   iframe.setAttribute("frameborder", "0");
-  iframe.setAttribute("loading", "lazy");
   return iframe;
 };
 
