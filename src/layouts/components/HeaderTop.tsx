@@ -46,7 +46,7 @@ export const Tags = ({
   );
 };
 
-export const HeaderTop = ({ }: { hasSearch?: boolean }) => {
+export const HeaderTop = ({}: { hasSearch?: boolean }) => {
   return (
     <HStack align={"center"} justify={"space-between"}>
       <HStack flex={1} justify={"left"} display={{ base: "flex", lg: "none" }}>
