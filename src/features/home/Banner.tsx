@@ -257,7 +257,7 @@ export const Banners = ({ banners }: BannersComponentProps) => {
                 dangerouslySetInnerHTML={{
                   __html: clean(
                     banners?.list_1?.text_10 ||
-                      "Miền Bắc: Số 116 Trần Vĩ, Phường Mai Dịch, Quận Cầu Giấy, Tp Hà Nội<br />Miền Nam: Số 469 Lê Hồng Phong, Phường 2, Quận 10, Thành phố Hồ Chí Minh"
+                    "Miền Bắc: Số 116 Trần Vĩ, Phường Mai Dịch, Quận Cầu Giấy, Tp Hà Nội<br />Miền Nam: Số 469 Lê Hồng Phong, Phường 2, Quận 10, Thành phố Hồ Chí Minh"
                   )
                 }}
               />

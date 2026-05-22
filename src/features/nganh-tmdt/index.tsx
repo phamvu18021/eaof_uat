@@ -1,8 +1,13 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import ProgramValues from "@/components/ProgramValues";
+import { Box } from "@chakra-ui/react";
+
+const ScrollViews = dynamic(() =>
+  import("@/components/ScrollView").then((mod) => mod.ScrollViews)
+);
 
 const Branch = dynamic(
   () => import("@/components/Branch").then((mod) => mod.Branch),
@@ -119,68 +124,74 @@ export const Tmdt = () => {
           ]}
         />
       </LayoutNganh>
-      <ProgramValues />
-      <BranchNganh
-        chuong_trinh_hoc={home_content?.acf?.chuong_trinh_hoc}
-        programlearns={[
-          home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_1 ||
-            "<b>Thương mại điện tử</b> là một ngành học thuộc khối kinh tế, là ngành học liên quan đến các hoạt động trong việc ứng dụng các công nghệ, truyền thông trên những ứng dụng trong quá trình kinh doanh trực tuyến.",
-          home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_2 ||
-            "Khi theo học <b>thương mại điện tử</b>, các bạn sinh viên sẽ được trang bị các kiến thức như: tổng quan về thương mại điện tử, quản trị dự án đầu tư, Digital Marketing, quản trị quan hệ khách hàng,...",
-          home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_3 ||
-            "Bên cạnh đó là những kiến thức liên quan đến tổ chức và điều hành doanh nghiệp kinh doanh trực tuyến như: Marketing điện tử, thực hiện các hoạt động quảng cáo online,thực hiện các hoạt động bán hàng trên các sản thương mại điện tử quốc tế như: Amazon, Alibaba,...",
-          home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_4 ||
-            "Sau khi tốt nghiệp <b>ngành thương mại điện tử</b>, các bạn sinh viên sẽ phát triển được sự sáng tạo, có định hướng kinh doanh trực tuyến, lên ý tưởng khởi nghiệp, có các kỹ năng liên quan đến quản trị đơn hàng và tiếp thị sản phẩm trên các nền tảng ứng dụng trực tuyến như: facebook, instagram, tiktok, youtube,..."
-        ]}
-      />
-      <Notifiy
-        src={
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.anh_anh ||
-          "/tmdtt.png"
-        }
-        titleprogram={[
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
-            ?.doi_tuong_tuyen_sinh?.tieu_de || "Đối tượng tuyển sinh",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thoi_gian
-            ?.tieu_de || "Thời gian đào tạo",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.hinh_thuc
-            ?.tieu_de || "Hình thức tuyển sinh",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thu_tuc
-            ?.tieu_de || "Thủ tục đăng ký"
-        ]}
-        overview={[""]}
-        program={[
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
-            ?.doi_tuong_tuyen_sinh?.text_1 ||
-            "Cán bộ, công chức, những người đang làm việc tại các cơ quan, tổ chức, doanh nghiệp nhà nước, tư nhân, lực lượng vũ trang....đã có bằng tốt nghiệp THPT",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
-            ?.doi_tuong_tuyen_sinh?.text_2 ||
-            "Những người đã có bằng tốt nghiệp THPT hoặc tương đương trở lên (TC, CĐ, ĐH,...)",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
-            ?.doi_tuong_tuyen_sinh?.text_3 ||
-            "Sinh viên đang theo tại các trường đại học, cao đẳng."
-        ]}
-        workjobs={[
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.hinh_thuc
-            ?.text_1 || "Xét tuyển theo hồ sơ, văn bằng",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.hinh_thuc
-            ?.text_2 || "Nhận hồ sơ liên tục trong năm."
-        ]}
-        worktitle={
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thoi_gian
-            ?.text_1 ||
-          "Thời gian đào tạo: Căn cứ vào hồ sơ, văn bằng của sinh viên nộp trong hồ sơ xét tuyển"
-        }
-        workjobstitles={
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thu_tuc
-            ?.text_1 ||
-          "Bạn vui lòng liên hệ theo hotline 0919.240.116 để được hỗ trợ tư vấn chi tiết về chương trình, lộ trình học và thủ tục đăng ký chương trình đại học từ xa của trường nhé!"
-        }
-        image={
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.anh_anh ||
-          "/tmdtt.png"
-        }
-      />
+      <ScrollViews fallback={<Box height="300px" />}>
+        <ProgramValues />
+      </ScrollViews>
+      <ScrollViews fallback={<Box height="300px" />}>
+        <BranchNganh
+          chuong_trinh_hoc={home_content?.acf?.chuong_trinh_hoc}
+          programlearns={[
+            home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_1 ||
+              "<b>Thương mại điện tử</b> là một ngành học thuộc khối kinh tế, là ngành học liên quan đến các hoạt động trong việc ứng dụng các công nghệ, truyền thông trên những ứng dụng trong quá trình kinh doanh trực tuyến.",
+            home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_2 ||
+              "Khi theo học <b>thương mại điện tử</b>, các bạn sinh viên sẽ được trang bị các kiến thức như: tổng quan về thương mại điện tử, quản trị dự án đầu tư, Digital Marketing, quản trị quan hệ khách hàng,...",
+            home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_3 ||
+              "Bên cạnh đó là những kiến thức liên quan đến tổ chức và điều hành doanh nghiệp kinh doanh trực tuyến như: Marketing điện tử, thực hiện các hoạt động quảng cáo online,thực hiện các hoạt động bán hàng trên các sản thương mại điện tử quốc tế như: Amazon, Alibaba,...",
+            home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_4 ||
+              "Sau khi tốt nghiệp <b>ngành thương mại điện tử</b>, các bạn sinh viên sẽ phát triển được sự sáng tạo, có định hướng kinh doanh trực tuyến, lên ý tưởng khởi nghiệp, có các kỹ năng liên quan đến quản trị đơn hàng và tiếp thị sản phẩm trên các nền tảng ứng dụng trực tuyến như: facebook, instagram, tiktok, youtube,..."
+          ]}
+        />
+      </ScrollViews>
+      <ScrollViews fallback={<Box height="300px" />}>
+        <Notifiy
+          src={
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.anh_anh ||
+            "/tmdtt.png"
+          }
+          titleprogram={[
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.doi_tuong_tuyen_sinh?.tieu_de || "Đối tượng tuyển sinh",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.thoi_gian?.tieu_de || "Thời gian đào tạo",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.hinh_thuc?.tieu_de || "Hình thức tuyển sinh",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thu_tuc
+              ?.tieu_de || "Thủ tục đăng ký"
+          ]}
+          overview={[""]}
+          program={[
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.doi_tuong_tuyen_sinh?.text_1 ||
+              "Cán bộ, công chức, những người đang làm việc tại các cơ quan, tổ chức, doanh nghiệp nhà nước, tư nhân, lực lượng vũ trang....đã có bằng tốt nghiệp THPT",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.doi_tuong_tuyen_sinh?.text_2 ||
+              "Những người đã có bằng tốt nghiệp THPT hoặc tương đương trở lên (TC, CĐ, ĐH,...)",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.doi_tuong_tuyen_sinh?.text_3 ||
+              "Sinh viên đang theo tại các trường đại học, cao đẳng."
+          ]}
+          workjobs={[
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.hinh_thuc?.text_1 || "Xét tuyển theo hồ sơ, văn bằng",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.hinh_thuc?.text_2 || "Nhận hồ sơ liên tục trong năm."
+          ]}
+          worktitle={
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.thoi_gian?.text_1 ||
+            "Thời gian đào tạo: Căn cứ vào hồ sơ, văn bằng của sinh viên nộp trong hồ sơ xét tuyển"
+          }
+          workjobstitles={
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thu_tuc
+              ?.text_1 ||
+            "Bạn vui lòng liên hệ theo hotline 0919.240.116 để được hỗ trợ tư vấn chi tiết về chương trình, lộ trình học và thủ tục đăng ký chương trình đại học từ xa của trường nhé!"
+          }
+          image={
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.anh_anh ||
+            "/tmdtt.png"
+          }
+        />
+      </ScrollViews>
     </>
   );
 };

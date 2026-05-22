@@ -1,8 +1,13 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import ProgramValues from "@/components/ProgramValues";
+import { Box } from "@chakra-ui/react";
+
+const ScrollViews = dynamic(() =>
+  import("@/components/ScrollView").then((mod) => mod.ScrollViews)
+);
 
 const Branch = dynamic(
   () => import("@/components/Branch").then((mod) => mod.Branch),
@@ -119,64 +124,70 @@ export const Tcnh = () => {
           ]}
         />
       </LayoutNganh>
-      <ProgramValues />
-      <BranchNganh
-        chuong_trinh_hoc={home_content?.acf?.chuong_trinh_hoc}
-        programlearns={[
-          home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_1 ||
-            "<b>Chương trình đào tạo Cử nhân trực tuyến ngành Tài chính - Ngân hàng</b> có nội dung bao hàm đầy đủ kiến thức tương đương với chương trình đại học chính quy ngành Tài chính - Ngân hàng, nhưng được thiết kế theo hướng tiếp cận nghề nghiệp.  Các kiến thức đại cương được tích lũy đồng thời hoặc sau đó, nhằm mở mang nhận thức về bối cảnh để phát triển tư duy tầm rộng.",
-          home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_2 ||
-            "Chương trình được thiết kế phù hợp với phương pháp học trực tuyến. Người học có thể đăng ký theo tín chỉ, học chậm hơn hay nhanh hơn nhưng phải đảm bảo phần khung bắt buộc theo quy định của Nhà trường."
-        ]}
-      />
-      <Notifiy
-        src={
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.anh_anh ||
-          "/tcnhh.png"
-        }
-        titleprogram={[
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
-            ?.doi_tuong_tuyen_sinh?.tieu_de || "Đối tượng tuyển sinh",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thoi_gian
-            ?.tieu_de || "Thời gian đào tạo",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.hinh_thuc
-            ?.tieu_de || "Hình thức tuyển sinh",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thu_tuc
-            ?.tieu_de || "Thủ tục đăng ký"
-        ]}
-        overview={[""]}
-        program={[
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
-            ?.doi_tuong_tuyen_sinh?.text_1 ||
-            "Cán bộ, công chức, những người đang làm việc tại các cơ quan, tổ chức, doanh nghiệp nhà nước, tư nhân, lực lượng vũ trang....đã có bằng tốt nghiệp THPT",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
-            ?.doi_tuong_tuyen_sinh?.text_2 ||
-            "Những người đã có bằng tốt nghiệp THPT hoặc tương đương trở lên (TC, CĐ, ĐH,...)",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
-            ?.doi_tuong_tuyen_sinh?.text_3 ||
-            "Sinh viên đang theo tại các trường đại học, cao đẳng."
-        ]}
-        workjobs={[
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.hinh_thuc
-            ?.text_1 || "Xét tuyển theo hồ sơ, văn bằng",
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.hinh_thuc
-            ?.text_2 || "Nhận hồ sơ liên tục trong năm."
-        ]}
-        worktitle={
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thoi_gian
-            ?.text_1 ||
-          "Thời gian đào tạo: Căn cứ vào hồ sơ, văn bằng của sinh viên nộp trong hồ sơ xét tuyển"
-        }
-        workjobstitles={
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thu_tuc
-            ?.text_1 ||
-          "Bạn vui lòng liên hệ theo hotline 0919.240.116 để được hỗ trợ tư vấn chi tiết về chương trình, lộ trình học và thủ tục đăng ký chương trình đại học từ xa của trường nhé!"
-        }
-        image={
-          home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.anh_anh ||
-          "/tcnhh.png"
-        }
-      />
+      <ScrollViews fallback={<Box height="300px" />}>
+        <ProgramValues />
+      </ScrollViews>
+      <ScrollViews fallback={<Box height="300px" />}>
+        <BranchNganh
+          chuong_trinh_hoc={home_content?.acf?.chuong_trinh_hoc}
+          programlearns={[
+            home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_1 ||
+              "<b>Chương trình đào tạo Cử nhân trực tuyến ngành Tài chính - Ngân hàng</b> có nội dung bao hàm đầy đủ kiến thức tương đương với chương trình đại học chính quy ngành Tài chính - Ngân hàng, nhưng được thiết kế theo hướng tiếp cận nghề nghiệp.  Các kiến thức đại cương được tích lũy đồng thời hoặc sau đó, nhằm mở mang nhận thức về bối cảnh để phát triển tư duy tầm rộng.",
+            home_content?.acf?.chuong_trinh_hoc?.noi_dung?.text_2 ||
+              "Chương trình được thiết kế phù hợp với phương pháp học trực tuyến. Người học có thể đăng ký theo tín chỉ, học chậm hơn hay nhanh hơn nhưng phải đảm bảo phần khung bắt buộc theo quy định của Nhà trường."
+          ]}
+        />
+      </ScrollViews>
+      <ScrollViews fallback={<Box height="300px" />}>
+        <Notifiy
+          src={
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.anh_anh ||
+            "/tcnhh.png"
+          }
+          titleprogram={[
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.doi_tuong_tuyen_sinh?.tieu_de || "Đối tượng tuyển sinh",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.thoi_gian?.tieu_de || "Thời gian đào tạo",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.hinh_thuc?.tieu_de || "Hình thức tuyển sinh",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thu_tuc
+              ?.tieu_de || "Thủ tục đăng ký"
+          ]}
+          overview={[""]}
+          program={[
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.doi_tuong_tuyen_sinh?.text_1 ||
+              "Cán bộ, công chức, những người đang làm việc tại các cơ quan, tổ chức, doanh nghiệp nhà nước, tư nhân, lực lượng vũ trang....đã có bằng tốt nghiệp THPT",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.doi_tuong_tuyen_sinh?.text_2 ||
+              "Những người đã có bằng tốt nghiệp THPT hoặc tương đương trở lên (TC, CĐ, ĐH,...)",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.doi_tuong_tuyen_sinh?.text_3 ||
+              "Sinh viên đang theo tại các trường đại học, cao đẳng."
+          ]}
+          workjobs={[
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.hinh_thuc?.text_1 || "Xét tuyển theo hồ sơ, văn bằng",
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.hinh_thuc?.text_2 || "Nhận hồ sơ liên tục trong năm."
+          ]}
+          worktitle={
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung
+              ?.thoi_gian?.text_1 ||
+            "Thời gian đào tạo: Căn cứ vào hồ sơ, văn bằng của sinh viên nộp trong hồ sơ xét tuyển"
+          }
+          workjobstitles={
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.noi_dung?.thu_tuc
+              ?.text_1 ||
+            "Bạn vui lòng liên hệ theo hotline 0919.240.116 để được hỗ trợ tư vấn chi tiết về chương trình, lộ trình học và thủ tục đăng ký chương trình đại học từ xa của trường nhé!"
+          }
+          image={
+            home_content?.acf?.thong_bao_tuyen_sinh?.noi_dung?.anh_anh ||
+            "/tcnhh.png"
+          }
+        />
+      </ScrollViews>
     </>
   );
 };
