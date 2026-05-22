@@ -2,7 +2,6 @@
 
 import { Box } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
 
 const ScrollViews = dynamic(() =>
   import("@/components/ScrollView").then((mod) => mod.ScrollViews)
@@ -40,26 +39,12 @@ const DiplomaSection = dynamic(() =>
   import("./DiplomaSection").then((mod) => mod.DiplomaSection)
 );
 
-export const Home = () => {
-  // const { isOpen, onOpen } = useModal();
-  const [home_content, setHomeContent] = useState<any>(null);
-  useEffect(() => {
-    const getHomeContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=trang-chu`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setHomeContent(data?.contentPage[0]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getHomeContent();
-  }, []);
+export interface HomeProps {
+  initialData?: any;
+}
+
+export const Home = ({ initialData }: HomeProps) => {
+  const home_content = initialData;
 
   // useEffect(() => {
   //   const timeout = setTimeout(() => {

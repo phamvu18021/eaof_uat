@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Box, Container, Grid, GridItem } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { InputSearch } from "../search/InputSearch";
 import { Breadcrumbs } from "@/components/Breadcrumb";
 import { Loading } from "@/components/Loading";
-import { useEffect, useState } from "react";
 
 const SLiderPosts = dynamic(
   () => import("../../components/SliderPosts").then((mod) => mod.SLiderPosts),
@@ -20,9 +19,10 @@ const ListPosts = dynamic(
 interface PostsProps {
   title: string;
   isShort: boolean;
+  initialData?: any;
 }
 
-export const Posts = ({ title, isShort }: PostsProps) => {
+export const Posts = ({ title, isShort, initialData }: PostsProps) => {
   const router = useRouter();
   const handleRouter = ({ selected }: { selected: number }) => {
     router.push(`/${routers}?page=${selected + 1}`);
@@ -72,25 +72,7 @@ export const Posts = ({ title, isShort }: PostsProps) => {
       break;
   }
 
-  const [home_content, setHomeContent] = useState<any>(null);
-
-  useEffect(() => {
-    const getHomeContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=tin-tuc`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setHomeContent(data?.contentPage[0]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getHomeContent();
-  }, []);
+  const home_content = initialData;
 
   return (
     <Box pb={"40px"}>

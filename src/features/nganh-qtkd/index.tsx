@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import dynamic from "next/dynamic";
 import ProgramValues from "@/components/ProgramValues";
 import { Box } from "@chakra-ui/react";
@@ -26,26 +24,13 @@ const LayoutNganh = dynamic(
   () => import("@/layouts/layoutNganh").then((mod) => mod.LayoutNganh),
   {}
 );
-export const Qtkd = () => {
-  const [home_content, setHomeContent] = useState<any>(null);
 
-  useEffect(() => {
-    const getHomeContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=quan-tri-kinh-doanh`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setHomeContent(data?.contentPage[0]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getHomeContent();
-  }, []);
+export interface QtkdProps {
+  initialData?: any;
+}
+
+export const Qtkd = ({ initialData }: QtkdProps) => {
+  const home_content = initialData;
   return (
     <>
       <LayoutNganh

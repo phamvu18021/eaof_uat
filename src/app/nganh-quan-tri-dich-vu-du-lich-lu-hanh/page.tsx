@@ -1,6 +1,7 @@
 import { Qtdlvlh } from "@/features/nganh-qtdlvlh";
 import { Metadata } from "next";
 import { getGlobalMetadata } from "@/lib/seo-helper";
+import { fetchContentPage } from "@/lib/fetchContentPage";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,9 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function Page() {
-  return <Qtdlvlh />;
+export default async function Page() {
+  const data = await fetchContentPage("quan-tri-dich-vu-du", 300);
+  const homeContent = data?.posts?.[0] || null;
+
+  return <Qtdlvlh initialData={homeContent} />;
 }

@@ -1,6 +1,7 @@
 import ContactInfo from "@/features/lien-he";
 import { Metadata } from "next";
 import { getGlobalMetadata } from "@/lib/seo-helper";
+import { fetchContentPage } from "@/lib/fetchContentPage";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function Page() {
-  return <ContactInfo />;
+export default async function Page() {
+  const data = await fetchContentPage("lien-he", 300);
+  const homeContent = data?.posts?.[0] || null;
+
+  return <ContactInfo initialData={homeContent} />;
 }

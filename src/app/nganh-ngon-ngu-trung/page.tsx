@@ -1,6 +1,7 @@
 import { Nnt } from "@/features/nganh-nnt";
 import { Metadata } from "next";
 import { getGlobalMetadata } from "@/lib/seo-helper";
+import { fetchContentPage } from "@/lib/fetchContentPage";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function Page() {
-  return <Nnt />;
+export default async function Page() {
+  const data = await fetchContentPage("ngon-ngu-trung", 300);
+  const homeContent = data?.posts?.[0] || null;
+
+  return <Nnt initialData={homeContent} />;
 }

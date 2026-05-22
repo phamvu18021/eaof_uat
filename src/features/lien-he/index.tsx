@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   Button,
@@ -13,29 +13,14 @@ import {
 import { Breadcrumbs } from "@/components/Breadcrumb";
 import { useModal } from "@/components/ModalContext";
 import { clean } from "@/lib/sanitizeHtml";
-import { useEffect, useState } from "react";
 
-export const ContactInfo = () => {
+export interface ContactInfoProps {
+  initialData?: any;
+}
+
+export const ContactInfo = ({ initialData }: ContactInfoProps) => {
   const { isOpen, onOpen } = useModal();
-  const [home_content, setHomeContent] = useState<any>(null);
-
-  useEffect(() => {
-    const getHomeContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=lien-he`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setHomeContent(data?.contentPage[0]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getHomeContent();
-  }, []);
+  const home_content = initialData;
 
   const contactInfo = [
     {

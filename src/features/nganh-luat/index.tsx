@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import ProgramValues from "@/components/ProgramValues";
 import { Box } from "@chakra-ui/react";
@@ -25,26 +24,12 @@ const LayoutNganh = dynamic(
   () => import("@/layouts/layoutNganh").then((mod) => mod.LayoutNganh),
   {}
 );
-export const Luat = () => {
-  const [home_content, setHomeContent] = useState<any>(null);
+export interface LuatProps {
+  initialData?: any;
+}
 
-  useEffect(() => {
-    const getHomeContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=luat`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setHomeContent(data?.contentPage[0]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getHomeContent();
-  }, []);
+export const Luat = ({ initialData }: LuatProps) => {
+  const home_content = initialData;
   return (
     <>
       <LayoutNganh

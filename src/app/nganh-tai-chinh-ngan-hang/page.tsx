@@ -1,6 +1,7 @@
 import { Tcnh } from "@/features/nganh-tcnh";
 import { Metadata } from "next";
 import { getGlobalMetadata } from "@/lib/seo-helper";
+import { fetchContentPage } from "@/lib/fetchContentPage";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function Page() {
-  return <Tcnh />;
+export default async function Page() {
+  const data = await fetchContentPage("tai-chinh-ngan-hang", 300);
+  const homeContent = data?.posts?.[0] || null;
+
+  return <Tcnh initialData={homeContent} />;
 }

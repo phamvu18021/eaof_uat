@@ -1,6 +1,7 @@
 import { Qtkd } from "@/features/nganh-qtkd";
 import { Metadata } from "next";
 import { getGlobalMetadata } from "@/lib/seo-helper";
+import { fetchContentPage } from "@/lib/fetchContentPage";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function Page() {
-  return <Qtkd />;
+export default async function Page() {
+  const data = await fetchContentPage("quan-tri-kinh-doanh", 300);
+  const homeContent = data?.posts?.[0] || null;
+
+  return <Qtkd initialData={homeContent} />;
 }

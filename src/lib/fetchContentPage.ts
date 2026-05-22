@@ -1,4 +1,7 @@
-export async function fetchContentPage(type: string): Promise<any | null> {
+export async function fetchContentPage(
+  type: string,
+  revalidate: number = 300
+): Promise<any | null> {
   const api_url =
     process.env.API_URL_TSEH || "https://admin.tuyensinh-ehou.vn/wp-json/wp/v2";
   const hasSSL = process.env.NEXT_PUBLIC_HAS_SSL || "true";
@@ -10,7 +13,7 @@ export async function fetchContentPage(type: string): Promise<any | null> {
   try {
     const endPoint = `${api_url}/${type}`;
     const res = await fetch(endPoint, {
-      next: { revalidate: 300 }
+      next: { revalidate }
     });
 
     if (!res.ok) {

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 const InfoContact = dynamic(() =>
@@ -10,26 +9,12 @@ const Trylearning = dynamic(() =>
   import("@/components/Contact").then((mod) => mod.Trylearning)
 );
 
-export const Lienhe = () => {
-  const [home_content, setHomeContent] = useState<any>(null);
+export interface LienheProps {
+  initialData?: any;
+}
 
-  useEffect(() => {
-    const getHomeContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=hoc-thu`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setHomeContent(data?.contentPage[0]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getHomeContent();
-  }, []);
+export const Lienhe = ({ initialData }: LienheProps) => {
+  const home_content = initialData;
   return (
     <>
       <Trylearning banner={home_content?.acf?.banner} />
