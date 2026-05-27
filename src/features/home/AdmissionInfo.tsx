@@ -40,7 +40,6 @@ export const AdmissionInfo = (item_6: any) => {
       ]
     }
   ];
-
   return (
     <Box bg="#f7f7f7" py={8}>
       <Container maxW="7xl">
